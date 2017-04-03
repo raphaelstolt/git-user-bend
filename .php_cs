@@ -8,7 +8,7 @@ $cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__;
 $rules = [
     'psr0' => false,
     '@PSR2' => true,
-    'ordered_imports' => ['alpha'],
+    'ordered_imports' => ['sortAlgorithm' => 'alpha'],
 ];
 
 return PhpCsFixer\Config::create()
