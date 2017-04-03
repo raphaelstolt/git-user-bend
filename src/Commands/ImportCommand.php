@@ -154,8 +154,9 @@ class ImportCommand extends Command
         $directory = $input->getArgument('directory');
 
         try {
-            $persona = $this->repository->getPersonaFromConfiguration();
             $alias = $this->guardAlias($this->guardRequiredAlias($input->getArgument('alias')));
+
+            $persona = $this->repository->getPersonaFromConfiguration();
             $persona = new Persona($alias, $persona->getName(), $persona->getEmail());
 
             if ($this->storage->add($persona)) {
