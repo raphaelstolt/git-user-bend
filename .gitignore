@@ -1,0 +1,7 @@
+.DS_Store
+.php_cs.cache
+/vendor
+/coverage-reports
+composer.lock
+phpunit.xml
+TODO.md

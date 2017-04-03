@@ -1,0 +1,58 @@
+#!/usr/bin/env php
+
+<?php
+
+$autoloads = [
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+];
+
+foreach ($autoloads as $autoload) {
+    if (file_exists($autoload)) {
+        require $autoload;
+        break;
+    }
+}
+
+use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Commands\AddCommand;
+use Stolt\GitUserBend\Commands\ExportCommand;
+use Stolt\GitUserBend\Commands\ImportCommand;
+use Stolt\GitUserBend\Commands\PairCommand;
+use Stolt\GitUserBend\Commands\PersonasCommand;
+use Stolt\GitUserBend\Commands\RetireCommand;
+use Stolt\GitUserBend\Commands\UseCommand;
+use Stolt\GitUserBend\Commands\WhoamiCommand;
+use Symfony\Component\Console\Application;
+
+if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+    $homeDiretory = getenv('HOME');
+} else {
+    $homeDiretory = getenv('userprofile');
+}
+
+define('HOME_DIRECTORY', $homeDiretory);
+define('WORKING_DIRECTORY', getcwd());
+define('VERSION', '1.0.0');
+define(
+    'STORAGE_FILE',
+    HOME_DIRECTORY . DIRECTORY_SEPARATOR . Storage::FILE_NAME
+);
+
+$application = new Application('Git user bend', VERSION);
+
+$storage = new Storage(STORAGE_FILE);
+$repository = new Repository(WORKING_DIRECTORY);
+
+$application->add(new AddCommand($storage));
+$application->add(new ImportCommand($storage, $repository));
+$application->add(new ExportCommand($storage, $repository));
+$application->add(new PairCommand($storage, $repository));
+$application->add(new PersonasCommand($storage));
+$application->add(new RetireCommand($storage));
+$application->add(new UseCommand($storage, $repository));
+$application->add(new WhoamiCommand($storage, $repository));
+
+$application->run();

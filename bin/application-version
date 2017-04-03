@@ -1,0 +1,101 @@
+#!/usr/bin/env php
+<?php
+$binApplicationName = 'git-user-bend';
+$binFile = __DIR__ . DIRECTORY_SEPARATOR . $binApplicationName;
+list($void, $binFileRelative) = explode($binApplicationName, $binFile, 2);
+$shortBinFilePath = $binApplicationName . $binFileRelative;
+
+$options = getopt('v:ch', ['version:', 'current', 'verify-tag-match', 'help', 'current-raw']);
+
+$help = <<<HELP
+This command sets the version number in the {$shortBinFilePath} file:
+
+Usage:
+  application-version [-hcv <version-number>] [--verify-tag-match]
+
+Options:
+  -c, --current, --current-raw    Display the current version number
+  --verify-tag-match              Verify application version and Git tag match
+  -v, --version <version-number>  The version number to set
+  -h, --help                      Display this help message
+
+HELP;
+
+if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
+    echo $help;
+    exit(0);
+}
+
+/**
+ * Return the application version.
+ *
+ * @param  string $binFile File holding the application version.
+ * @return string
+ */
+function get_application_version($binFile) {
+    $matches = [];
+    $match = preg_match(
+        '/(\d+\.)?(\d+\.)?(\*|\d+)/',
+        file_get_contents($binFile),
+        $matches
+    );
+
+    return trim($matches[0]);
+}
+
+/**
+ * Return latest tagged version.
+ *
+ * @return string
+ */
+function get_latest_tagged_version() {
+    exec('git describe --tags --abbrev=0', $output);
+
+    return trim($output[0]);
+}
+
+if (array_key_exists('verify-tag-match', $options)) {
+    $applicationVersion = 'v' . get_application_version($binFile);
+    $latestGitTag = get_latest_tagged_version();
+
+    if ($applicationVersion === $latestGitTag) {
+        echo "The application version and Git tag match on {$latestGitTag}." . PHP_EOL;
+        exit(0);
+    }
+    echo "The application version {$applicationVersion} and Git tag {$latestGitTag} don't match." . PHP_EOL;
+    exit(1);
+}
+
+if (array_key_exists('current-raw', $options)) {
+    echo get_application_version($binFile) . PHP_EOL;
+    exit(0);
+}
+
+if (array_key_exists('c', $options) || array_key_exists('current', $options)) {
+    $applicationVersion = 'v' . get_application_version($binFile);
+    $latestGitTag = get_latest_tagged_version();
+
+    echo "Current version set in {$shortBinFilePath} is {$applicationVersion}." . PHP_EOL;
+    echo "Current tagged version {$latestGitTag}." . PHP_EOL;
+    exit(0);
+}
+
+if ($options === []) {
+    echo 'No options set.' . PHP_EOL;
+    exit(1);
+}
+
+$version = isset($options['version']) ? trim($options['version']) : trim($options['v']);
+
+$fileContent = file_get_contents($binFile);
+$fileContent = preg_replace(
+    '/(.*define.*VERSION.*)/',
+    "define('VERSION', '$version');",
+    $fileContent
+);
+
+file_put_contents($binFile, $fileContent);
+
+echo "Set version in {$shortBinFilePath} to {$version}." . PHP_EOL;
+
+exit(0);
