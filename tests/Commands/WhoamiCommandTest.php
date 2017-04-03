@@ -5,12 +5,12 @@ namespace Stolt\GitUserBend\Tests\Commands;
 use Stolt\GitUserBend\Commands\WhoamiCommand;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
-use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Pair;
+use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
-use Stolt\GitUserBend\Tests\CommandTester;
 
 class WhoamiCommandTest extends TestCase
 {

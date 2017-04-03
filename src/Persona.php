@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Stolt\GitUserBend;
 
-use Stolt\GitUserBend\Exceptions\InvalidPersona;
-use Stolt\GitUserBend\Exceptions\InvalidEmail;
 use Stolt\GitUserBend\Exceptions\InvalidAlias;
+use Stolt\GitUserBend\Exceptions\InvalidEmail;
+use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Traits\Guards;

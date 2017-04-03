@@ -5,9 +5,9 @@ namespace Stolt\GitUserBend\Traits;
 
 use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Exceptions\InvalidAlias;
+use Stolt\GitUserBend\Exceptions\InvalidEmail;
 use Stolt\GitUserBend\Exceptions\NoDefinedPersonas;
 use Stolt\GitUserBend\Exceptions\UnknownPersona;
-use Stolt\GitUserBend\Exceptions\InvalidEmail;
 use Stolt\GitUserBend\Persona;
 
 trait Guards

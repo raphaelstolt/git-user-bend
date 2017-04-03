@@ -4,9 +4,9 @@ namespace Stolt\GitUserBend\Tests\Commands;
 
 use Stolt\GitUserBend\Commands\PersonasCommand;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
-use Stolt\GitUserBend\Tests\CommandTester;
 
 class PersonasCommandTest extends TestCase
 {

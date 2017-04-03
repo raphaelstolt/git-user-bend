@@ -8,9 +8,9 @@ use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
-use Stolt\GitUserBend\Tests\CommandTester;
 
 class ImportCommandTest extends TestCase
 {

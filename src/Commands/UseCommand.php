@@ -1,19 +1,19 @@
 <?php
 namespace Stolt\GitUserBend\Commands;
 
-use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Exceptions\CommandFailed;
-use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
+use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Exceptions\UnresolvablePair;
+use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
-use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Persona\Pair;
+use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Traits\Guards;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Stolt\GitUserBend\Traits\Guards;
 
 class UseCommand extends Command
 {
@@ -128,13 +128,11 @@ class UseCommand extends Command
                     if ($persona->equals($pairFromConfiguration->factorPersona())) {
                         throw new Exception("Pair {$persona} already in use.");
                     }
-
                 } else {
                     $personaFromGitConfiguration = $this->repository->getPersonaFromConfiguration();
                     if ($persona->equals($personaFromGitConfiguration)) {
                         throw new Exception("Persona {$persona} already in use.");
                     }
-
                 }
             } catch (UnresolvablePersona $e) {
                 // ignore because we are using user from persona storage

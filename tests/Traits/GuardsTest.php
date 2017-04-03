@@ -3,10 +3,10 @@
 namespace Stolt\GitUserBend\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
-use Stolt\GitUserBend\Traits\Guards;
 use Stolt\GitUserBend\Exceptions\InvalidAlias;
 use Stolt\GitUserBend\Exceptions\InvalidEmail;
 use Stolt\GitUserBend\Persona;
+use Stolt\GitUserBend\Traits\Guards;
 
 class GuardsTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 namespace Stolt\GitUserBend\Commands;
 
-use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Exceptions\CommandFailed;
+use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;

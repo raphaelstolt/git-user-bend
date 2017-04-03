@@ -7,9 +7,9 @@ use Stolt\GitUserBend\Commands\RetireCommand;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Collection;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
-use Stolt\GitUserBend\Tests\CommandTester;
 
 class RetireCommandTest extends TestCase
 {

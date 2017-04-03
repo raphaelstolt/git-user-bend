@@ -6,9 +6,9 @@ use Mockery;
 use Stolt\GitUserBend\Commands\AddCommand;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
-use Stolt\GitUserBend\Tests\CommandTester;
 
 class AddCommandTest extends TestCase
 {

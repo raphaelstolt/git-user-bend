@@ -2,8 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Exceptions;
 
-use Stolt\GitUserBend\Exceptions\Exception;
 use PHPUnit\Framework\TestCase;
+use Stolt\GitUserBend\Exceptions\Exception;
 
 class ExceptionTest extends TestCase
 {

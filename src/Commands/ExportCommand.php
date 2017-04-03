@@ -5,12 +5,12 @@ use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Traits\Guards;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Stolt\GitUserBend\Traits\Guards;
 
 class ExportCommand extends Command
 {
