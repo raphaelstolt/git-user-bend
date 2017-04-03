@@ -180,9 +180,13 @@ class UseCommand extends Command
 
         try {
             $personaFromGubDotFile = $this->repository->getPersonaFromGubDotFile();
-            $personaFromLocalGitConfiguration = $this->repository->getPersonaFromConfiguration();
-            if ($personaFromGubDotFile->equals($personaFromLocalGitConfiguration)) {
-                throw new Exception("Persona {$personaFromGubDotFile} already in use.");
+            try {
+                $personaFromLocalGitConfiguration = $this->repository->getPersonaFromConfiguration();
+                if ($personaFromGubDotFile->equals($personaFromLocalGitConfiguration)) {
+                    throw new Exception("Persona {$personaFromGubDotFile} already in use.");
+                }
+            } catch (UnresolvablePersona $e) {
+                // ignore because we are using user from persona storage
             }
 
             $gubDotFile = $this->repository->getGubDotFilePath();
