@@ -643,6 +643,38 @@ CONTENT;
      * @test
      * @group integration
      */
+    public function returnsExpectedWarningWhenAliasAndAliasesArgumentsAreUsedTogether()
+    {
+        $this->createTemporaryGitRepository();
+
+        $existingStorageContent = <<<CONTENT
+[{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
+ {"alias":"ja","name":"Jane Doe","email":"jane.doe@example.org","usage_frequency":23}]
+CONTENT;
+        $this->createTemporaryStorageFile($existingStorageContent);
+
+        $command = $this->application->find('use');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'directory' => $this->temporaryDirectory,
+            'alias' => 'jo',
+            'aliases' => 'jo,ja',
+        ]);
+
+        $expectedDisplay = <<<CONTENT
+Error: The alias and aliases arguments can't be used together.
+
+CONTENT;
+
+        $this->assertSame($expectedDisplay, $commandTester->getDisplay());
+        $this->assertTrue($commandTester->getStatusCode() == 1);
+    }
+
+    /**
+     * @test
+     * @group integration
+     */
     public function usesPairAndIncrementsUsageFrequencies()
     {
         $john = new Persona('jo', 'John Doe', 'john.doe@example.org');

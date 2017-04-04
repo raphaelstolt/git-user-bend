@@ -101,6 +101,7 @@ class UseCommand extends Command
         $aliases = $input->getArgument('aliases');
 
         try {
+            $this->guardDualAliasArguments($input, $output);
             $this->repository->setDirectory($directory);
 
             if ($isFromDotFileUse) {
@@ -164,6 +165,24 @@ class UseCommand extends Command
             $output->writeln($error);
 
             return 1;
+        }
+    }
+
+    /**
+     * @param  \Symfony\Component\Console\Input\InputInterface   $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @throws \Stolt\GitUserBend\Exceptions\Exception
+     */
+    private function guardDualAliasArguments(
+        InputInterface $input,
+        OutputInterface $output
+    ) {
+        $alias = $input->getArgument('alias');
+        $aliases = explode(',' , $input->getArgument('aliases'));
+
+        if ($alias && count($aliases) > 1) {
+            $exceptionMessage = "The 'alias' and 'aliases' arguments can't be used together.";
+            throw new Exception($exceptionMessage);
         }
     }
 
