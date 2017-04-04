@@ -54,18 +54,18 @@ class UseCommand extends Command
         $this->setName('use');
         $this->setDescription('Uses a persona for a Git repository');
 
-        $aliasesArgumentDescription = 'The comma-separated persona aliases';
-        $this->addArgument(
-            'aliases',
-            InputArgument::OPTIONAL,
-            $aliasesArgumentDescription
-        );
-
         $personaArgumentDescription = 'The persona alias for the Git repository';
         $this->addArgument(
             'alias',
             InputArgument::OPTIONAL,
             $personaArgumentDescription
+        );
+
+        $aliasesArgumentDescription = 'The comma-separated persona aliases';
+        $this->addArgument(
+            'aliases',
+            InputArgument::OPTIONAL,
+            $aliasesArgumentDescription
         );
 
         $directoryArgumentDescription = 'The directory of the Git repository';
