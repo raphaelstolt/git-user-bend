@@ -178,7 +178,7 @@ class UseCommand extends Command
         OutputInterface $output
     ) {
         $alias = $input->getArgument('alias');
-        $aliases = explode(',' , $input->getArgument('aliases'));
+        $aliases = explode(',', $input->getArgument('aliases'));
 
         if ($alias && count($aliases) > 1) {
             $exceptionMessage = "The 'alias' and 'aliases' arguments can't be used together.";
