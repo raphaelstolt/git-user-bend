@@ -190,7 +190,7 @@ class Repository
         $command = 'git config --local --get-regexp "^user.*"';
         exec($command, $output, $returnValue);
 
-        if ($returnValue === 0) {
+        if ($returnValue === 0 && count($output) > 1) {
             $possiblePair = $this->factorUser($output);
             if (strstr($possiblePair->getName(), " and ")) {
                 return true;

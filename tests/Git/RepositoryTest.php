@@ -354,6 +354,21 @@ class RepositoryTest extends TestCase
     /**
      * @test
      * @group unit
+     * @ticket 3 (https://github.com/raphaelstolt/git-user-bend/issues/3)
+     */
+    public function doesNotDetectPairWhenOnlyEmailSet()
+    {
+        $user = new User('John Doe');
+        $this->createTemporaryGitRepository($user);
+
+        $repository = new Repository($this->temporaryDirectory);
+
+        $this->assertFalse($repository->hasPair());
+    }
+
+    /**
+     * @test
+     * @group unit
      */
     public function throwsExpectedExceptionWhenPairUserNotResolvableFromGitConfiguration()
     {

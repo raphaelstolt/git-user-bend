@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.0.3 `2017-04-04`
+- Fix pair detection. Fixes [#3](https://github.com/raphaelstolt/git-user-bend/issues/3).
+
 #### v1.0.2 `2017-04-04`
 - Fix usage of single persona alias. Fixes [#1](https://github.com/raphaelstolt/git-user-bend/issues/1).
 - Additional guard against dual alias and aliases argument usage on `use` command.
