@@ -58,14 +58,14 @@ To view all defined personas the `personas` command is at your service.
 git-user-bend personas
 ```
 
-To bend the persona of a Git repository, the `use` command is there to change the Git user configuration to the aliased user details. When using the `--from-dotfile` option the persona defined in a `.gub` dotfile is used. When an aliased persona from the global storage should be used its alias has to be provided. When a pair should be used their aliases have to be provided.
+To bend the persona of a Git repository, the `use` command is there to change the Git user configuration to the aliased user details. When using the `--from-dotfile` option the persona defined in a `.gub` dotfile is used. When an aliased persona from the global storage should be used its alias has to be provided. When a pair should be used their aliases have to be provided as a comma-separated list.
 ``` bash
 git-user-bend use [<alias>|<aliases>] [<directory>] [--from-dotfile]
 ```
 
-To start a pair programming session, which will be identifiable in the Git commits, the `pair` command merges the user details of several personas into one pair. The email of the first argumented persona alias will be used for the Git `user.email` configuration.
+To start a pair programming session, which will be identifiable in the Git commits, the `pair` command merges the user details of several personas into one pair. The email of the first persona alias in the comma-separated list will be used for the Git `user.email` configuration.
 ``` bash
-git-user-bend pair "paul" "sarah" [<directory>]
+git-user-bend pair "paul,sarah" [<directory>]
 ```
 
 To check the persona, pair or respectively the Git user configuration of a repository the `whoami` command is a pleasant shortcut.
