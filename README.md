@@ -1,7 +1,7 @@
 git-user-bend
 ================
 [![Build Status](https://travis-ci.org/raphaelstolt/git-user-bend.svg?branch=master)](https://travis-ci.org/raphaelstolt/git-user-bend)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/raphaelstolt/git-user-bend?svg=true)](https://ci.appveyor.com/api/projects/status/github/raphaelstolt/git-user-bend)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/raphaelstolt/git-user-bend?svg=true)](https://ci.appveyor.com/project/raphaelstolt/git-user-bend)
 [![Version](http://img.shields.io/packagist/v/stolt/git-user-bend.svg?style=flat)](https://packagist.org/packages/stolt/git-user-bend)
 ![PHP Version](http://img.shields.io/badge/php-7.0+-ff69b4.svg)
 
