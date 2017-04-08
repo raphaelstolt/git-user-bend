@@ -125,9 +125,9 @@ class TestCase extends PHPUnitTestCase
 
 
     /**
-     * Create temporary gub file.
+     * Create temporary gub dotfile.
      *
-     * @param  Stolt\GitUserBend\Persona $persona The persona to set.
+     * @param  Stolt\GitUserBend\Persona $persona The persona to set in the gub dotfile.
      *
      * @return integer
      */
