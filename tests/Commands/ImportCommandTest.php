@@ -226,10 +226,6 @@ CONTENT;
             '--from-dotfile' => true,
         ]);
 
-        $localGubDotFile = $this->temporaryDirectory
-            . DIRECTORY_SEPARATOR
-            . Repository::GUB_FILENAME;
-
         $expectedDisplay = <<<CONTENT
 Error: The alias jo is already present.
 
@@ -263,10 +259,6 @@ CONTENT;
             'directory' => $this->temporaryDirectory,
             '--from-dotfile' => true,
         ]);
-
-        $localGubDotFile = $this->temporaryDirectory
-            . DIRECTORY_SEPARATOR
-            . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
 Error: The persona is already aliased to jo.

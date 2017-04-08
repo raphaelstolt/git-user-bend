@@ -550,10 +550,6 @@ CONTENT;
             'alias' => $persona->getAlias(),
         ]);
 
-        $localGubDotFile = $this->temporaryDirectory
-            . DIRECTORY_SEPARATOR
-            . Repository::GUB_FILENAME;
-
         $expectedDisplay = <<<CONTENT
 Set persona {$persona}.
 
@@ -701,10 +697,6 @@ CONTENT;
             'directory' => $this->temporaryDirectory,
             'aliases' => 'jo,ja',
         ]);
-
-        $localGubDotFile = $this->temporaryDirectory
-            . DIRECTORY_SEPARATOR
-            . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
 Set pair {$pair}.
