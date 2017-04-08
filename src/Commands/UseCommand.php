@@ -96,7 +96,7 @@ class UseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $directory = $input->getArgument('directory');
-        $isFromDotFileUse = $input->getOption('from-dotfile');
+        $isFromDotfileUse = $input->getOption('from-dotfile');
         $alias = $input->getArgument('alias');
         $aliases = $input->getArgument('aliases');
 
@@ -104,8 +104,8 @@ class UseCommand extends Command
             $this->guardDualAliasArguments($input, $output);
             $this->repository->setDirectory($directory);
 
-            if ($isFromDotFileUse) {
-                return $this->useFromGubDotFile($input, $output);
+            if ($isFromDotfileUse) {
+                return $this->useFromGubDotfile($input, $output);
             }
             if ($aliases) {
                 $pairPersonas = $this->guardAliases($aliases);
@@ -191,36 +191,36 @@ class UseCommand extends Command
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
      * @return integer
      */
-    private function useFromGubDotFile(
+    private function useFromGubDotfile(
         InputInterface $input,
         OutputInterface $output
     ) {
         $directory = $input->getArgument('directory');
 
         try {
-            $personaFromGubDotFile = $this->repository->getPersonaFromGubDotFile();
+            $personaFromGubDotfile = $this->repository->getPersonaFromGubDotfile();
             try {
                 $personaFromLocalGitConfiguration = $this->repository->getPersonaFromConfiguration();
-                if ($personaFromGubDotFile->equals($personaFromLocalGitConfiguration)) {
-                    throw new Exception("Persona {$personaFromGubDotFile} already in use.");
+                if ($personaFromGubDotfile->equals($personaFromLocalGitConfiguration)) {
+                    throw new Exception("Persona {$personaFromGubDotfile} already in use.");
                 }
             } catch (UnresolvablePersona $e) {
                 // ignore because we are using user from persona storage
             }
 
-            $gubDotFile = $this->repository->getGubDotFilePath();
-            if ($this->repository->setUser($personaFromGubDotFile->factorUser())) {
+            $gubDotfile = $this->repository->getGubDotfilePath();
+            if ($this->repository->setUser($personaFromGubDotfile->factorUser())) {
                 if ($this->storage->all()->count() > 0) {
-                    $this->storage->incrementUsageFrequency($personaFromGubDotFile->getAlias());
+                    $this->storage->incrementUsageFrequency($personaFromGubDotfile->getAlias());
                 }
-                $outputContent = "<info>Set <comment>{$personaFromGubDotFile}</comment>"
-                    . " from <comment>{$gubDotFile}</comment>.</info>";
+                $outputContent = "<info>Set <comment>{$personaFromGubDotfile}</comment>"
+                    . " from <comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
                 return 0;
             }
 
-            $exceptionMessage = "Failed to set persona '{$personaFromGubDotFile}' "
-                . "from '{$gubDotFile}'.";
+            $exceptionMessage = "Failed to set persona '{$personaFromGubDotfile}' "
+                . "from '{$gubDotfile}'.";
             throw new CommandFailed($exceptionMessage);
         } catch (Exception $e) {
             $error = "<error>Error:</error> " . $e->getInforizedMessage();

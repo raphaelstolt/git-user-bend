@@ -86,23 +86,23 @@ class ExportCommand extends Command
 
             $this->repository->setDirectory($directory);
             $persona = $this->storage->all()->getByAlias($alias);
-            $gubDotFile = $directory
+            $gubDotfile = $directory
                 . DIRECTORY_SEPARATOR
                 . Repository::GUB_FILENAME;
 
-            if ($this->repository->hasGubDotFile()) {
-                $gubDotFilePersona = $this->repository->getPersonaFromGubDotFile();
-                if ($persona->equals($gubDotFilePersona)) {
+            if ($this->repository->hasGubDotfile()) {
+                $gubDotfilePersona = $this->repository->getPersonaFromGubDotfile();
+                if ($persona->equals($gubDotfilePersona)) {
                     $exceptionMessage = "The persona '{$persona}' is already "
-                        . "present in '{$gubDotFile}'.";
+                        . "present in '{$gubDotfile}'.";
                     throw new CommandFailed($exceptionMessage);
                 }
             }
 
-            if ($this->repository->createGubDotFile($persona)) {
+            if ($this->repository->createGubDotfile($persona)) {
                 $outputContent = "<info>Exported persona aliased by "
                     . "<comment>{$alias}</comment> into "
-                    . "<comment>{$gubDotFile}</comment>.</info>";
+                    . "<comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
 
                 return 0;

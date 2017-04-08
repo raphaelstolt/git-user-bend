@@ -131,14 +131,14 @@ class TestCase extends PHPUnitTestCase
      *
      * @return integer
      */
-    protected function createTemporaryGubDotFile(Persona $persona)
+    protected function createTemporaryGubDotfile(Persona $persona)
     {
-        $temporaryGubDotFile = $this->temporaryDirectory
+        $temporaryGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         return file_put_contents(
-            $temporaryGubDotFile,
+            $temporaryGubDotfile,
             json_encode($persona->gubFileSerialize())
         );
     }

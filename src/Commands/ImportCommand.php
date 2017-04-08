@@ -71,13 +71,13 @@ class ImportCommand extends Command
             $aliasArgumentDescription
         );
 
-        $fromDotFileOptionDescription = 'Do an import from a local '
+        $fromDotfileOptionDescription = 'Do an import from a local '
             . Repository::GUB_FILENAME . ' file';
         $this->addOption(
             'from-dotfile',
             null,
             InputOption::VALUE_NONE,
-            $fromDotFileOptionDescription
+            $fromDotfileOptionDescription
         );
     }
 
@@ -92,13 +92,13 @@ class ImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $directory = $input->getArgument('directory');
-        $isFromDotFileImport = $input->getOption('from-dotfile');
+        $isFromDotfileImport = $input->getOption('from-dotfile');
 
         try {
             $this->repository->setDirectory($directory);
 
-            if ($isFromDotFileImport) {
-                return $this->importFromGubDotFile($input, $output);
+            if ($isFromDotfileImport) {
+                return $this->importFromGubDotfile($input, $output);
             }
 
             return $this->importFromRepository($input, $output);
@@ -115,26 +115,26 @@ class ImportCommand extends Command
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
      * @return integer
      */
-    private function importFromGubDotFile(
+    private function importFromGubDotfile(
         InputInterface $input,
         OutputInterface $output
     ) {
         $directory = $input->getArgument('directory');
 
         try {
-            $persona = $this->repository->getPersonaFromGubDotFile();
-            $gubDotFile = $this->repository->getGubDotFilePath();
+            $persona = $this->repository->getPersonaFromGubDotfile();
+            $gubDotfile = $this->repository->getGubDotfilePath();
 
             if ($this->storage->add($persona)) {
                 $outputContent = "<info>Imported persona <comment>{$persona}</comment> "
-                    . "from <comment>{$gubDotFile}</comment>.</info>";
+                    . "from <comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
 
                 return 0;
             }
 
             $exceptionMessage = "Failed to import persona '{$persona}' "
-                 . "from '{$gubDotFile}'.";
+                 . "from '{$gubDotfile}'.";
             throw new CommandFailed($exceptionMessage);
         } catch (Exception $e) {
             $error = "<error>Error:</error> " . $e->getInforizedMessage();

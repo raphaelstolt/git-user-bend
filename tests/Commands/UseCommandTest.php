@@ -235,7 +235,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenNoGubDotFilePresent()
+    public function returnsExpectedWarningWhenNoGubDotfilePresent()
     {
         $this->createTemporaryGitRepository();
 
@@ -260,7 +260,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenGubDotFileInvalid()
+    public function returnsExpectedWarningWhenGubDotfileInvalid()
     {
         $this->createTemporaryGitRepository();
 
@@ -292,12 +292,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenPersonaFromGubDotFileAlreadyInUse()
+    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyInUse()
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
         $this->createTemporaryGitRepository($persona->factorUser());
-        $this->createTemporaryGubDotFile($persona);
+        $this->createTemporaryGubDotfile($persona);
 
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
@@ -320,12 +320,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function usesPersonaFromGubDotFile()
+    public function usesPersonaFromGubDotfile()
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
         $this->createTemporaryGitRepository();
-        $this->createTemporaryGubDotFile($persona);
+        $this->createTemporaryGubDotfile($persona);
 
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
@@ -335,12 +335,12 @@ CONTENT;
             '--from-dotfile' => true,
         ]);
 
-        $localGubDotFile = $this->temporaryDirectory
+        $localGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
-Set {$persona} from {$localGubDotFile}.
+Set {$persona} from {$localGubDotfile}.
 
 CONTENT;
 
@@ -352,12 +352,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function usesPersonaFromGubDotFileAndIncrementsUsageFrequencyIfInStorage()
+    public function usesPersonaFromGubDotfileAndIncrementsUsageFrequencyIfInStorage()
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
         $this->createTemporaryGitRepository();
-        $this->createTemporaryGubDotFile($persona);
+        $this->createTemporaryGubDotfile($persona);
 
         $existingStorageContent = <<<CONTENT
 [{"alias":"jd","name":"John Doe","email":"john.doe@example.org","usage_frequency":12},
@@ -373,12 +373,12 @@ CONTENT;
             '--from-dotfile' => true,
         ]);
 
-        $localGubDotFile = $this->temporaryDirectory
+        $localGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
-Set {$persona} from {$localGubDotFile}.
+Set {$persona} from {$localGubDotfile}.
 
 CONTENT;
 
@@ -392,7 +392,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenUseFromGubDotFileFails()
+    public function returnsExpectedWarningWhenUseFromGubDotfileFails()
     {
         $this->createTemporaryGitRepository();
 
@@ -405,16 +405,16 @@ CONTENT;
         $command = new UseCommand($storage, $repository);
         $application->add($command);
 
-        $localGubDotFile = $this->temporaryDirectory
+        $localGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $repository->shouldReceive('setDirectory')->times(1);
-        $repository->shouldReceive('getGubDotFilePath')->times(1)
-          ->andReturn($localGubDotFile);
+        $repository->shouldReceive('getGubDotfilePath')->times(1)
+          ->andReturn($localGubDotfile);
         $repository->shouldReceive('getPersonaFromConfiguration')
           ->times(1)->andReturn($personaCurrentlyUsed);
-        $repository->shouldReceive('getPersonaFromGubDotFile')
+        $repository->shouldReceive('getPersonaFromGubDotfile')
           ->times(1)->andReturn($personaToUse);
 
         $repository->shouldReceive('setUser')->times(1)->andReturn(false);
@@ -427,7 +427,7 @@ CONTENT;
         ]);
 
         $expectedDisplay = <<<CONTENT
-Error: Failed to set persona jd ~ John Doe <john.doe@example.org> from {$localGubDotFile}.
+Error: Failed to set persona jd ~ John Doe <john.doe@example.org> from {$localGubDotfile}.
 
 CONTENT;
 

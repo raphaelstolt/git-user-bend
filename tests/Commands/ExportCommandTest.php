@@ -192,16 +192,16 @@ CONTENT;
             'alias' => 'jo',
         ]);
 
-        $expectedGubDotFile = $this->temporaryDirectory
+        $expectedGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
-Exported persona aliased by jo into $expectedGubDotFile.
+Exported persona aliased by jo into {$expectedGubDotfile}.
 
 CONTENT;
 
-        $expectedGubDotFileContent = <<<CONTENT
+        $expectedGubDotfileContent = <<<CONTENT
 {
     "alias": "jo",
     "name": "John Doe",
@@ -212,14 +212,14 @@ CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
         $this->assertTrue($commandTester->getStatusCode() == 0);
-        $this->assertStringEqualsFile($expectedGubDotFile, $expectedGubDotFileContent);
+        $this->assertStringEqualsFile($expectedGubDotfile, $expectedGubDotfileContent);
     }
 
     /**
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenCreateGubDotFileFails()
+    public function returnsExpectedWarningWhenCreateGubDotfileFails()
     {
         $this->createTemporaryGitRepository();
 
@@ -235,8 +235,8 @@ CONTENT;
         $application->add($command);
 
         $repository->shouldReceive('setDirectory')->times(1);
-        $repository->shouldReceive('hasGubDotFile')->times(1)->andReturn(false);
-        $repository->shouldReceive('createGubDotFile')->times(1)->andReturn(false);
+        $repository->shouldReceive('hasGubDotfile')->times(1)->andReturn(false);
+        $repository->shouldReceive('createGubDotfile')->times(1)->andReturn(false);
 
         $command = $application->find('export');
         $commandTester = new CommandTester($command);
@@ -258,7 +258,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenExportPersonaAlreadyInGubDotFile()
+    public function returnsExpectedWarningWhenExportPersonaAlreadyInGubDotfile()
     {
         $this->createTemporaryGitRepository();
 
@@ -269,7 +269,7 @@ CONTENT;
         $this->createTemporaryStorageFile($existingStorageContent);
 
         $gubFilePersona = new Persona('jo', 'John Doe', 'john.doe@example.org');
-        $this->createTemporaryGubDotFile($gubFilePersona);
+        $this->createTemporaryGubDotfile($gubFilePersona);
 
         $command = $this->application->find('export');
         $commandTester = new CommandTester($command);
@@ -278,12 +278,12 @@ CONTENT;
             'alias' => 'jo',
         ]);
 
-        $expectedGubDotFile = $this->temporaryDirectory
+        $expectedGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
-Error: The persona {$gubFilePersona} is already present in $expectedGubDotFile.
+Error: The persona {$gubFilePersona} is already present in {$expectedGubDotfile}.
 
 CONTENT;
 

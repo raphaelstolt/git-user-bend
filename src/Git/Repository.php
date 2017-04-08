@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Stolt\GitUserBend\Git;
 
-use Stolt\GitUserBend\Exceptions\InvalidGubDotFile;
-use Stolt\GitUserBend\Exceptions\NonExistentGubDotFile;
+use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
+use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
 use Stolt\GitUserBend\Exceptions\NotADirectory;
 use Stolt\GitUserBend\Exceptions\NotAGitRepository;
 use Stolt\GitUserBend\Exceptions\UnresolvablePair;
@@ -59,19 +59,19 @@ class Repository
     /**
      * @return boolean
      */
-    public function hasGubDotFile(): bool
+    public function hasGubDotfile(): bool
     {
-        $gubDotFile = $this->directory
+        $gubDotfile = $this->directory
             . DIRECTORY_SEPARATOR
             . self::GUB_FILENAME;
 
-        return file_exists($gubDotFile);
+        return file_exists($gubDotfile);
     }
 
     /**
      * @return string
      */
-    public function getGubDotFilePath(): string
+    public function getGubDotfilePath(): string
     {
         return $this->directory
             . DIRECTORY_SEPARATOR
@@ -84,64 +84,64 @@ class Repository
      * @param  Stolt\GitUserBend\Persona $persona
      * @return boolean
      */
-    public function createGubDotFile(Persona $persona): bool
+    public function createGubDotfile(Persona $persona): bool
     {
-        $gubDotFile = $this->directory
+        $gubDotfile = $this->directory
             . DIRECTORY_SEPARATOR
             . self::GUB_FILENAME;
 
-        $gubDotFileContent = json_encode(
+        $gubDotfileContent = json_encode(
             $persona->gubFileSerialize(),
             JSON_PRETTY_PRINT
         );
 
         return file_put_contents(
-            $gubDotFile, $gubDotFileContent . "\n"
+            $gubDotfile, $gubDotfileContent . "\n"
         ) > 0;
     }
 
     /**
      * @return Stolt\GitUserBend\Persona
-     * @throws InvalidGubDotFile
-     * @throws NonExistentGubDotFile
+     * @throws InvalidGubDotfile
+     * @throws NonExistentGubDotfile
      */
-    public function getPersonaFromGubDotFile()
+    public function getPersonaFromGubDotfile()
     {
-        if (!$this->hasGubDotFile()) {
+        if (!$this->hasGubDotfile()) {
             $exceptionMessage = 'No ' . self::GUB_FILENAME . ' file present '
                 . "in '{$this->directory}'.";
-            throw new NonExistentGubDotFile($exceptionMessage);
+            throw new NonExistentGubDotfile($exceptionMessage);
         }
 
-        $gubDotFile = $this->directory
+        $gubDotfile = $this->directory
             . DIRECTORY_SEPARATOR
             . self::GUB_FILENAME;
 
-        $personaFromGubDotFile = json_decode(
-            file_get_contents($gubDotFile),
+        $personaFromGubDotfile = json_decode(
+            file_get_contents($gubDotfile),
             true
         );
 
-        if ($personaFromGubDotFile === null) {
+        if ($personaFromGubDotfile === null) {
             $exceptionMessage = 'Invalid ' . self::GUB_FILENAME . ' file content. '
                 . 'JSON error: ' . json_last_error_msg() . '.';
-            throw new InvalidGubDotFile($exceptionMessage);
+            throw new InvalidGubDotfile($exceptionMessage);
         }
 
-        if (isset($personaFromGubDotFile['alias'])
-            && isset($personaFromGubDotFile['name'])
-            && isset($personaFromGubDotFile['email'])
+        if (isset($personaFromGubDotfile['alias'])
+            && isset($personaFromGubDotfile['name'])
+            && isset($personaFromGubDotfile['email'])
         ) {
             return new Persona(
-                $personaFromGubDotFile['alias'],
-                $personaFromGubDotFile['name'],
-                $personaFromGubDotFile['email']
+                $personaFromGubDotfile['alias'],
+                $personaFromGubDotfile['name'],
+                $personaFromGubDotfile['email']
             );
         }
 
         $exceptionMessage = 'Invalid ' . self::GUB_FILENAME . ' file content '
             . 'unable to create a persona from it.';
-        throw new InvalidGubDotFile($exceptionMessage);
+        throw new InvalidGubDotfile($exceptionMessage);
     }
 
     /**

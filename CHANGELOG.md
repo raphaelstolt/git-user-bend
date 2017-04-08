@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.0.4 `2017-04-08`
+- Fix dotfile spelling. Fixes [#2](https://github.com/raphaelstolt/git-user-bend/issues/2).
+
 #### v1.0.3 `2017-04-04`
 - Fix pair detection. Fixes [#3](https://github.com/raphaelstolt/git-user-bend/issues/3).
 

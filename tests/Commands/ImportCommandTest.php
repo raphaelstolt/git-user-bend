@@ -120,7 +120,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenNoGubDotFilePresent()
+    public function returnsExpectedWarningWhenNoGubDotfilePresent()
     {
         $this->createTemporaryGitRepository();
 
@@ -145,7 +145,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenGubDotFileInvalid()
+    public function returnsExpectedWarningWhenGubDotfileInvalid()
     {
         $this->createTemporaryGitRepository();
 
@@ -173,12 +173,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function importsAPersonaFromALocalGubDotFileIntoNonExistentStorage()
+    public function importsAPersonaFromALocalGubDotfileIntoNonExistentStorage()
     {
         $personaToImport = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
         $this->createTemporaryGitRepository();
-        $this->createTemporaryGubDotFile($personaToImport);
+        $this->createTemporaryGubDotfile($personaToImport);
 
         $command = $this->application->find('import');
         $commandTester = new CommandTester($command);
@@ -188,12 +188,12 @@ CONTENT;
             '--from-dotfile' => true,
         ]);
 
-        $localGubDotFile = $this->temporaryDirectory
+        $localGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $expectedDisplay = <<<CONTENT
-Imported persona {$personaToImport} from {$localGubDotFile}.
+Imported persona {$personaToImport} from {$localGubDotfile}.
 
 CONTENT;
 
@@ -205,12 +205,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenAliasFromGubDotFileAlreadyPresent()
+    public function returnsExpectedWarningWhenAliasFromGubDotfileAlreadyPresent()
     {
         $this->createTemporaryGitRepository();
 
         $existingPersona = new Persona('jo', 'John Doe', 'john.doe@example.org');
-        $this->createTemporaryGubDotFile($existingPersona);
+        $this->createTemporaryGubDotfile($existingPersona);
 
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -243,12 +243,12 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenPersonaFromGubDotFileAlreadyAliased()
+    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyAliased()
     {
         $this->createTemporaryGitRepository();
 
         $existingPersona = new Persona('jd', 'John Doe', 'john.doe@example.org');
-        $this->createTemporaryGubDotFile($existingPersona);
+        $this->createTemporaryGubDotfile($existingPersona);
 
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -281,7 +281,7 @@ CONTENT;
      * @test
      * @group integration
      */
-    public function returnsExpectedWarningWhenImportFromGubDotFileFails()
+    public function returnsExpectedWarningWhenImportFromGubDotfileFails()
     {
         $this->createTemporaryGitRepository();
         $personaToImport = new Persona('jd', 'John Doe', 'john.doe@example.org');
@@ -292,14 +292,14 @@ CONTENT;
         $command = new ImportCommand($storage, $repository);
         $application->add($command);
 
-        $localGubDotFile = $this->temporaryDirectory
+        $localGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $repository->shouldReceive('setDirectory')->times(1);
-        $repository->shouldReceive('getGubDotFilePath')->times(1)
-          ->andReturn($localGubDotFile);
-        $repository->shouldReceive('getPersonaFromGubDotFile')
+        $repository->shouldReceive('getGubDotfilePath')->times(1)
+          ->andReturn($localGubDotfile);
+        $repository->shouldReceive('getPersonaFromGubDotfile')
           ->times(1)->andReturn($personaToImport);
 
         $storage->shouldReceive('add')->times(1)->andReturn(false);
@@ -312,7 +312,7 @@ CONTENT;
         ]);
 
         $expectedDisplay = <<<CONTENT
-Error: Failed to import persona jd ~ John Doe <john.doe@example.org> from {$localGubDotFile}.
+Error: Failed to import persona jd ~ John Doe <john.doe@example.org> from {$localGubDotfile}.
 
 CONTENT;
 

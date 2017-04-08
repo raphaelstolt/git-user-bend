@@ -3,8 +3,8 @@
 namespace Stolt\GitUserBend\Tests\Git;
 
 use \phpmock\phpunit\PHPMock;
-use Stolt\GitUserBend\Exceptions\InvalidGubDotFile;
-use Stolt\GitUserBend\Exceptions\NonExistentGubDotFile;
+use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
+use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
 use Stolt\GitUserBend\Exceptions\NotADirectory;
 use Stolt\GitUserBend\Exceptions\NotAGitRepository;
 use Stolt\GitUserBend\Exceptions\UnresolvablePair;
@@ -57,17 +57,17 @@ class RepositoryTest extends TestCase
      * @test
      * @group unit
      */
-    public function returnsGubDotFilePath()
+    public function returnsGubDotfilePath()
     {
-        $expectedGubDotFilePath = $this->temporaryDirectory
+        $expectedGubDotfilePath = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $repository = new Repository($this->temporaryDirectory);
 
         $this->assertEquals(
-            $expectedGubDotFilePath,
-            $repository->getGubDotFilePath()
+            $expectedGubDotfilePath,
+            $repository->getGubDotfilePath()
         );
     }
 
@@ -288,18 +288,18 @@ class RepositoryTest extends TestCase
      * @test
      * @group unit
      */
-    public function returnsPersonaFromLocalGubDotFile()
+    public function returnsPersonaFromLocalGubDotfile()
     {
         $this->createTemporaryGitRepository();
 
         $gubFilePersona = new Persona('jd', 'John Doe', 'john.doe@example.org');
-        $this->createTemporaryGubDotFile($gubFilePersona);
+        $this->createTemporaryGubDotfile($gubFilePersona);
 
         $repository = new Repository($this->temporaryDirectory);
 
         $this->assertEquals(
             $gubFilePersona,
-            $repository->getPersonaFromGubDotFile()
+            $repository->getPersonaFromGubDotfile()
         );
     }
 
@@ -307,30 +307,30 @@ class RepositoryTest extends TestCase
      * @test
      * @group unit
      */
-    public function createsLocalGubDotFileFromPersona()
+    public function createsLocalGubDotfileFromPersona()
     {
         $this->createTemporaryGitRepository();
 
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
         $repository = new Repository($this->temporaryDirectory);
 
-        $this->assertTrue($repository->createGubDotFile($persona));
+        $this->assertTrue($repository->createGubDotfile($persona));
         $this->assertEquals(
             $persona,
-            $repository->getPersonaFromGubDotFile()
+            $repository->getPersonaFromGubDotfile()
         );
 
-        $expectedGubDotFileContent = json_encode(
+        $expectedGubDotfileContent = json_encode(
             $persona->gubFileSerialize(),
             JSON_PRETTY_PRINT
         );
-        $expectedGubDotFile = $this->temporaryDirectory
+        $expectedGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
         $this->assertStringEqualsFile(
-            $expectedGubDotFile,
-            $expectedGubDotFileContent . "\n"
+            $expectedGubDotfile,
+            $expectedGubDotfileContent . "\n"
         );
     }
 
@@ -406,25 +406,25 @@ class RepositoryTest extends TestCase
      * @test
      * @group unit
      */
-    public function throwsExpectedExceptionForNonExistentGubDotFile()
+    public function throwsExpectedExceptionForNonExistentGubDotfile()
     {
-        $this->expectException(NonExistentGubDotFile::class);
+        $this->expectException(NonExistentGubDotfile::class);
         $expectedExceptionMessage = "No .gub file present in '{$this->temporaryDirectory}'.";
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->createTemporaryGitRepository();
 
         $repository = new Repository($this->temporaryDirectory);
-        $repository->getPersonaFromGubDotFile();
+        $repository->getPersonaFromGubDotfile();
     }
 
     /**
      * @test
      * @group unit
      */
-    public function throwsExpectedExceptionForInvalidGubDotFile()
+    public function throwsExpectedExceptionForInvalidGubDotfile()
     {
-        $this->expectException(InvalidGubDotFile::class);
+        $this->expectException(InvalidGubDotfile::class);
         $expectedExceptionMessage = 'Invalid .gub file content. JSON error: Syntax error.';
         $this->expectExceptionMessage($expectedExceptionMessage);
 
@@ -436,16 +436,16 @@ class RepositoryTest extends TestCase
         file_put_contents($temporaryGubFile, 'fooo');
 
         $repository = new Repository($this->temporaryDirectory);
-        $repository->getPersonaFromGubDotFile();
+        $repository->getPersonaFromGubDotfile();
     }
 
     /**
      * @test
      * @group unit
      */
-    public function throwsExpectedExceptionForInvalidGubDotFileContent()
+    public function throwsExpectedExceptionForInvalidGubDotfileContent()
     {
-        $this->expectException(InvalidGubDotFile::class);
+        $this->expectException(InvalidGubDotfile::class);
         $expectedExceptionMessage = 'Invalid .gub file content '
             . 'unable to create a persona from it.';
 
@@ -459,7 +459,7 @@ class RepositoryTest extends TestCase
         file_put_contents($temporaryGubFile, '{"ALIAS":"jd","NAME":"John Doe"}');
 
         $repository = new Repository($this->temporaryDirectory);
-        $repository->getPersonaFromGubDotFile();
+        $repository->getPersonaFromGubDotfile();
     }
 
     /**
