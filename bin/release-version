@@ -71,7 +71,6 @@ function fulfillsPreconditions()
     echo 'Checking release preconditions' . PHP_EOL;
 
     $precondictionCommands = [
-        "composer travis-lint",
         "composer cs-lint",
     ];
 
