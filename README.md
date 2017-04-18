@@ -28,13 +28,13 @@ Just run the `git-user-bend whoami` CLI within a Git repository (or an argumente
 
 The personas and their usage frequencies are stored in a JSON based global storage file called `.gub.personas` in the `$HOME` directory of your system.
 
-Via a `.gub` dotfile it's also possible to add the details of __single__ persona directly into a project repository. This is mostly oriented for repository maintainers working on multiple machines and with multiple personas.
+Via a `.gub` dotfile it's also possible to add the details of __single__ persona directly into a project repository. This is mostly oriented for repository maintainers working on multiple machines and with multiple personas. To keep your email address __private__ consider using your `username@users.noreply.github.com` email address, for details see [Setting your email in Git](https://help.github.com/articles/setting-your-email-in-git/).
 
 #### Available commands
 To create a new persona the `add` command is available. It allows you to define an alias linked to persona details, which are basically the user name and email. Every added persona is stored in the global storage.
 ``` bash
 git-user-bend add <alias> <name> <email>
-git-user-bend add "oss" "Raphael Stolt" "raphael.stolt@example.org"
+git-user-bend add "oss" "Raphael Stolt" "raphaelstolt@users.noreply.github.com"
 git-user-bend add "com" "Raphael Stolt" "raphael.stolt@company.com"
 ```
 
