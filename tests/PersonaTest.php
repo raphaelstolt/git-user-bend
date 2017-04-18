@@ -84,6 +84,17 @@ class PersonaTest extends TestCase
      * @test
      * @group unit
      */
+    public function personaWithPrivateGitHubEmailIsConsideredAsAValidPersona()
+    {
+        $john = new Persona('jo', 'John Doe', 'johndoe@users.noreply.github.com', 17);
+
+        $this->assertEquals('jo', $john->getAlias());
+    }
+
+    /**
+     * @test
+     * @group unit
+     */
     public function createsPersonaFromGitRepository()
     {
         $expectedRepositoryUser = new User('John Doe', 'john.doe@example.org');
