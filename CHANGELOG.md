@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.1.1 `2017-05-02`
+- Exclude release related utilities from release.
+
 #### v1.1.0 `2017-05-02`
 - Additional `--edit|-e` option on `personas` command to edit persona details. Closes [#4](https://github.com/raphaelstolt/git-user-bend/issues/4).
 
