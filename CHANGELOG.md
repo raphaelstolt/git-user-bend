@@ -1,5 +1,8 @@
 # Changelog
 
+#### v1.1.0 `2017-05-02`
+- Additional `--edit|-e` option on `personas` command to edit persona details. Closes [#4](https://github.com/raphaelstolt/git-user-bend/issues/4).
+
 #### v1.0.4 `2017-04-08`
 - Fix dotfile spelling. Fixes [#2](https://github.com/raphaelstolt/git-user-bend/issues/2).
 

@@ -2,6 +2,7 @@
 
 namespace Stolt\GitUserBend\Tests\Commands;
 
+use \phpmock\phpunit\PHPMock;
 use Stolt\GitUserBend\Commands\PersonasCommand;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Tests\CommandTester;
@@ -10,6 +11,8 @@ use Symfony\Component\Console\Application;
 
 class PersonasCommandTest extends TestCase
 {
+    use PHPMock;
+
     /**
      * @var \Symfony\Component\Console\Application
      */
@@ -113,6 +116,57 @@ CONTENT;
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
+        $this->assertTrue($commandTester->getStatusCode() == 0);
+    }
+
+    /**
+     * @test
+     * @group integration
+     */
+    public function returnsExpectedWarningWhenNoStorageFilePresent()
+    {
+        $command = $this->application->find('personas');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            '--edit' => true,
+        ]);
+
+        $expectedDisplay = <<<CONTENT
+Error: No personas defined yet therefore nothing to edit. Use the add or import command to define some.
+
+CONTENT;
+
+        $this->assertSame($expectedDisplay, $commandTester->getDisplay());
+        $this->assertTrue($commandTester->getStatusCode() == 1);
+    }
+
+    /**
+     * @test
+     * @group integration
+     */
+    public function returnsExpectedReturnCodeWhenOpeningAnEditor()
+    {
+        $existingStorageContent = <<<CONTENT
+[{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
+ {"alias":"so","name":"Some One","email":"some.one@example.org","usage_frequency":23}]
+CONTENT;
+        $this->createTemporaryStorageFile($existingStorageContent);
+
+        $system = $this->getFunctionMock(
+            'Stolt\GitUserBend\Commands',
+            'system'
+        );
+        $system->expects($this->once())->willReturn(1);
+
+        $command = $this->application->find('personas');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            '--edit' => true,
+        ]);
+
+        $this->assertEmpty($commandTester->getDisplay());
         $this->assertTrue($commandTester->getStatusCode() == 0);
     }
 }

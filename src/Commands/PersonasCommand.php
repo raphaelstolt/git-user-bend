@@ -39,6 +39,14 @@ class PersonasCommand extends Command
     {
         $this->setName('personas');
         $this->setDescription('Lists the defined personas');
+
+        $editorOptionDescription = 'Open the ' . Storage::FILE_NAME .' file for editing';
+        $this->addOption(
+            'edit',
+            'e',
+            InputOption::VALUE_NONE,
+            $editorOptionDescription
+        );
     }
 
     /**
@@ -51,6 +59,37 @@ class PersonasCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('edit')) {
+            $editor = escapeshellcmd(getenv('EDITOR'));
+
+            if (!$editor) {
+                if ($this->isWindows()) {
+                    $editor = 'notepad';
+                } else {
+                    foreach (array('editor', 'vim', 'vi', 'nano', 'pico', 'ed') as $candidate) {
+                        if (exec('which ' . $candidate)) {
+                            $editor = $candidate;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (file_exists(STORAGE_FILE)) {
+                system($editor . ' ' . STORAGE_FILE . ($this->isWindows() ? '' : ' > `tty`'));
+
+                return 0;
+            }
+
+            $error = '<error>Error:</error> No personas defined yet '
+                . 'therefore nothing to edit. '
+                . 'Use the <comment>add</comment> or <comment>import</comment> '
+                . 'command to define some.';
+            $output->writeln($error);
+
+            return 1;
+        }
+
         $personas = $this->storage->all();
         if ($personas->count() === 0) {
             $error = '<error>Error:</error> No personas defined yet. '
@@ -62,6 +101,14 @@ class PersonasCommand extends Command
         }
 
         $this->renderTable($output, $personas);
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isWindows()
+    {
+        return defined('PHP_WINDOWS_VERSION_BUILD');
     }
 
     /**
