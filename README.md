@@ -53,9 +53,9 @@ To remove a defined persona from the global storage the `retire` command can be 
 git-user-bend retire "oss"
 ```
 
-To view all defined personas the `personas` command is at your service.
+To view all defined personas the `personas` command is at your service. Via the `--edit|-e` option the global storage file called `.gub.personas` will be editable via the defined `$EDITOR`.
 ``` bash
-git-user-bend personas
+git-user-bend personas [--edit|-e]
 ```
 
 To bend the persona of a Git repository, the `use` command is there to change the Git user configuration to the aliased user details. When using the `--from-dotfile` option the persona defined in a `.gub` dotfile is used. When an aliased persona from the global storage should be used its alias has to be provided. When a pair should be used their aliases have to be provided as a comma-separated list.
