@@ -108,12 +108,7 @@ class RepositoryTest extends TestCase
         ];
 
         $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
-        $exec->expects($this->at(0))->willReturnCallback(
-            function ($command, &$output, &$returnValue) {
-                $returnValue = 1;
-            }
-        );
-        $exec->expects($this->at(1))->willReturnCallback(
+        $exec->expects($this->once())->willReturnCallback(
             function ($command, &$output, &$returnValue) use ($mockedOutput) {
                 $output = $mockedOutput;
                 $returnValue = 0;
@@ -145,12 +140,7 @@ class RepositoryTest extends TestCase
         ];
 
         $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
-        $exec->expects($this->at(0))->willReturnCallback(
-            function ($command, &$output, &$returnValue) {
-                $returnValue = 1;
-            }
-        );
-        $exec->expects($this->at(1))->willReturnCallback(
+        $exec->expects($this->once())->willReturnCallback(
             function ($command, &$output, &$returnValue) use ($mockedOutput) {
                 $output = $mockedOutput;
                 $returnValue = 0;
@@ -179,102 +169,6 @@ class RepositoryTest extends TestCase
         );
 
         $this->createTemporaryGitRepository($localRepositoryUser);
-
-        $repository = new Repository($this->temporaryDirectory);
-
-        $this->assertEquals(
-            $expectedPersona,
-            $repository->getPersonaFromConfiguration()
-        );
-    }
-
-    /**
-     * @test
-     * @group unit
-     * @runInSeparateProcess
-     */
-    public function returnsPersonaEmailFromGlobalAndPersonaNameFromLocalGitConfiguration()
-    {
-        $expectedPersona = new Persona(
-            Persona::REPOSITORY_USER_ALIAS,
-            'Jane Doe',
-            'jane.doe@example.org'
-        );
-
-        $this->createTemporaryGitRepository(
-            new User($expectedPersona->getName())
-        );
-
-        $localMockedOutput = [
-            'user.name Jane Doe',
-        ];
-
-        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
-        $exec->expects($this->at(0))->willReturnCallback(
-            function ($command, &$output, &$returnValue) use ($localMockedOutput) {
-                $output = $localMockedOutput;
-                $returnValue = 0;
-            }
-        );
-
-        $globalMockedOutput = [
-            'user.email jane.doe@example.org',
-        ];
-
-        $exec->expects($this->at(1))->willReturnCallback(
-            function ($command, &$output, &$returnValue) use ($globalMockedOutput) {
-                $output = $globalMockedOutput;
-                $returnValue = 0;
-            }
-        );
-
-        $repository = new Repository($this->temporaryDirectory);
-
-        $this->assertEquals(
-            $expectedPersona,
-            $repository->getPersonaFromConfiguration()
-        );
-    }
-
-    /**
-     * @test
-     * @group unit
-     * @runInSeparateProcess
-     */
-    public function returnsPersonaNameFromGlobalAndPersonaEmailFromLocalGitConfiguration()
-    {
-        $expectedPersona = new Persona(
-            Persona::REPOSITORY_USER_ALIAS,
-            'Jane Doe',
-            'jane.doe@example.org'
-        );
-
-        $this->createTemporaryGitRepository(
-            new User($expectedPersona->getName())
-        );
-
-        $localMockedOutput = [
-            'user.email jane.doe@example.org',
-        ];
-
-        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
-        $exec->expects($this->at(0))->willReturnCallback(
-            function ($command, &$output, &$returnValue) use ($localMockedOutput) {
-                $output = $localMockedOutput;
-                $returnValue = 0;
-            }
-        );
-
-        $globalMockedOutput = [
-            'user.name Jane Doe',
-        ];
-
-        $exec->expects($this->at(1))->willReturnCallback(
-            function ($command, &$output, &$returnValue) use ($globalMockedOutput) {
-                $output = $globalMockedOutput;
-                $returnValue = 0;
-            }
-        );
 
         $repository = new Repository($this->temporaryDirectory);
 

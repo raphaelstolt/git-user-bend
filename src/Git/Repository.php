@@ -151,7 +151,7 @@ class Repository
     public function getPersonaFromConfiguration(): Persona
     {
         chdir($this->directory);
-        $command = 'git config --local --get-regexp "^user.*"';
+        $command = 'git config --get-regexp "^user.*"';
         exec($command, $output, $returnValue);
 
         if ($returnValue === 0) {
@@ -159,23 +159,6 @@ class Repository
             if ($localGitUser->partial() === false) {
                 return $localGitUser->factorPersona();
             }
-        }
-
-        $command = 'git config --global --get-regexp "^user.*"';
-        exec($command, $output, $returnValue);
-
-        if ($returnValue === 0) {
-            $globalGitUser = $this->factorUser($output);
-            if (isset($localGitUser)) {
-                if ($localGitUser->hasName()) {
-                    $globalGitUser->setName($localGitUser->getName());
-                }
-                if ($localGitUser->hasEmail()) {
-                    $globalGitUser->setEmail($localGitUser->getEmail());
-                }
-            }
-
-            return $globalGitUser->factorPersona();
         }
 
         throw new UnresolvablePersona('Unable to resolve persona from Git configuration.');
