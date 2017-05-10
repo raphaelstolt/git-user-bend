@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [v1.1.2] - 2017-05-10
+### Fixed
+- Let `git config` collect the persona details from global > local > to conditional configuration includes. Fixes [#5](https://github.com/raphaelstolt/git-user-bend/issues/5).
+
 ## [v1.1.1] - 2017-05-02
 ### Fixed
 - Exclude release related utilities from release.
@@ -35,7 +39,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## v1.0.0 - 2017-04-03
 - First release.
 
-[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.2...HEAD
+[v1.1.2]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/raphaelstolt/git-user-bend/compare/v1.0.4...v1.1.0
 [v1.0.4]: https://github.com/raphaelstolt/git-user-bend/compare/v1.0.3...v1.0.4
