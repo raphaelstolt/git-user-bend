@@ -13,16 +13,18 @@ With the in Git `2.13` introduced [conditional configuration includes](https://g
 This CLI is influenced by the [Gas](https://github.com/walle/gas) Ruby gem and might also contain elements of [pair](https://github.com/square/pair).
 
 #### Installation
+The `git-user-bend` CLI should be installed globally through Composer.
+
 ``` bash
 composer global require stolt/git-user-bend
 ```
 
-Make sure that `~/.composer/vendor/bin` is on your `$PATH`. This way the `git-user-bend` executable can be located.
+Make sure that the path to your global vendor binaries directory is in your `$PATH`. You can determine the location of your global vendor binaries directory via `composer global config bin-dir --absolute`. This way the `git-user-bend` executable can be located.
 
-Since the default name of the CLI is quite a mouthful, an alias which can be placed in `~/.aliases`, `~/.zshrc` or the like might come in handy.
+Since the default name of the CLI is quite a mouthful, an alias which can be placed in `~/.aliases`, `~/.zshrc` or the like might come in handy. The alias shown next assumes that `$COMPOSER_HOME` is `~/.config/composer` and not `~/.composer`.
 
 ``` bash
-alias gub='$HOME/.composer/vendor/bin/git-user-bend $@'
+alias gub='~/.config/composer/vendor/bin/git-user-bend $@'
 ```
 
 ## Usage
