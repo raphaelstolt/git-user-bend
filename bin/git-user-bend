@@ -25,6 +25,7 @@ if (false === $autoloaded) {
 
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Persona\Storage;
+use Stolt\GitUserBend\Helpers\Str as OsHelper;
 use Stolt\GitUserBend\Commands\AddCommand;
 use Stolt\GitUserBend\Commands\ExportCommand;
 use Stolt\GitUserBend\Commands\ImportCommand;
@@ -35,10 +36,10 @@ use Stolt\GitUserBend\Commands\UseCommand;
 use Stolt\GitUserBend\Commands\WhoamiCommand;
 use Symfony\Component\Console\Application;
 
-if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-    $homeDiretory = getenv('HOME');
-} else {
+if ((new OsHelper())->isWindows()) {
     $homeDiretory = getenv('userprofile');
+} else {
+    $homeDiretory = getenv('HOME');
 }
 
 define('HOME_DIRECTORY', $homeDiretory);

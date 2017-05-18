@@ -15,6 +15,7 @@ foreach ($autoloads as $autoload) {
 }
 
 use vierbergenlars\SemVer\version as SemVer;
+use Stolt\GitUserBend\Helpers\Str as OsHelper;
 
 $binApplicationName = 'git-user-bend';
 $binFile = __DIR__ . DIRECTORY_SEPARATOR . $binApplicationName;
@@ -46,19 +47,6 @@ HELP;
 if (array_key_exists('h', $options) || array_key_exists('help', $options)) {
     echo $help;
     exit(0);
-}
-
-/**
- * Check if current system is Windows.
- *
- * @return boolean
- */
-function isWindows() {
-    if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-        return false;
-    }
-
-    return true;
 }
 
 /**
@@ -95,7 +83,7 @@ function fulfillsPreconditions()
  * @return boolean
  */
 function is_repository_in_releaseable_state() {
-    if (isWindows()) {
+    if ((new OsHelper())->isWindows()) {
         exec('git status --porcelain | FIND /v /c ""', $output);
     } else {
         exec('expr $(git status --porcelain 2>/dev/null | egrep "^(M| M|D| D|\??)" | wc -l)', $output);

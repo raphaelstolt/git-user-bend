@@ -1,6 +1,7 @@
 <?php
 namespace Stolt\GitUserBend\Commands;
 
+use Stolt\GitUserBend\Helpers\Str as OsHelper;
 use Stolt\GitUserBend\Persona\Collection;
 use Stolt\GitUserBend\Persona\Storage;
 use Symfony\Component\Console\Command\Command;
@@ -63,7 +64,7 @@ class PersonasCommand extends Command
             $editor = escapeshellcmd(getenv('EDITOR'));
 
             if (!$editor) {
-                if ($this->isWindows()) {
+                if ((new OsHelper())->isWindows()) {
                     $editor = 'notepad';
                 } else {
                     foreach (array('editor', 'vim', 'vi', 'nano', 'pico', 'ed') as $candidate) {
@@ -76,7 +77,7 @@ class PersonasCommand extends Command
             }
 
             if (file_exists(STORAGE_FILE)) {
-                system($editor . ' ' . STORAGE_FILE . ($this->isWindows() ? '' : ' > `tty`'));
+                system($editor . ' ' . STORAGE_FILE . ((new OsHelper())->isWindows() ? '' : ' > `tty`'));
 
                 return 0;
             }
@@ -101,14 +102,6 @@ class PersonasCommand extends Command
         }
 
         $this->renderTable($output, $personas);
-    }
-
-    /**
-     * @return boolean
-     */
-    private function isWindows()
-    {
-        return defined('PHP_WINDOWS_VERSION_BUILD');
     }
 
     /**

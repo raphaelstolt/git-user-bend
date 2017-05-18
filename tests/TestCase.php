@@ -5,6 +5,7 @@ namespace Stolt\GitUserBend\Tests;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
+use Stolt\GitUserBend\Helpers\Str as OsHelper;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
 
@@ -22,7 +23,7 @@ class TestCase extends PHPUnitTestCase
      */
     protected function setUpTemporaryDirectory()
     {
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        if ((new OsHelper())->isWindows() === false) {
             ini_set('sys_temp_dir', '/tmp/gub');
             $this->temporaryDirectory = '/tmp/gub';
         } else {
