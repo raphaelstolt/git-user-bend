@@ -96,7 +96,8 @@ class Repository
         );
 
         return file_put_contents(
-            $gubDotfile, $gubDotfileContent . "\n"
+            $gubDotfile,
+            $gubDotfileContent . "\n"
         ) > 0;
     }
 

@@ -67,7 +67,8 @@ class WhoamiCommandTest extends TestCase
         }
         $application = new Application();
         $application->add(new WhoamiCommand(
-            new Storage(STORAGE_FILE), new Repository(WORKING_DIRECTORY)
+            new Storage(STORAGE_FILE),
+            new Repository(WORKING_DIRECTORY)
         ));
 
         $this->application = $application;
@@ -80,7 +81,8 @@ class WhoamiCommandTest extends TestCase
     {
         $application = new Application();
         $application->add(new WhoamiCommand(
-            new Storage(STORAGE_FILE), new Repository(WORKING_DIRECTORY)
+            new Storage(STORAGE_FILE),
+            new Repository(WORKING_DIRECTORY)
         ));
 
         return $application;

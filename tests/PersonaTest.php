@@ -190,7 +190,8 @@ class PersonaTest extends TestCase
         $persona = new Persona(
             Persona::REPOSITORY_USER_ALIAS,
             'John Doe',
-            'john.doe@example.org', 17
+            'john.doe@example.org',
+            17
         );
 
         $expectedString = $persona->getName() . ' <' . $persona->getEmail() . '>';
@@ -207,12 +208,14 @@ class PersonaTest extends TestCase
         $john = new Persona(
             'john',
             'John Doe',
-            'john.doe@example.org', 17
+            'john.doe@example.org',
+            17
         );
         $jane = new Persona(
             'jane',
             'Jane Doe',
-            'jane.doe@example.org', 17
+            'jane.doe@example.org',
+            17
         );
 
         $this->assertTrue($john->equals($john));
