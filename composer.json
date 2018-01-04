@@ -28,6 +28,14 @@
         "sort-packages": true
     },
     "bin": ["bin/git-user-bend"],
+    "scripts-descriptions": {
+        "test": "Runs all tests.",
+        "test-with-coverage": "Runs all tests and measures code coverage.",
+        "configure-commit-template": "Configures a local commit message template.",
+        "cs-fix": "Fixes coding standard violations.",
+        "cs-lint": "Checks for coding standard violations.",
+        "application-version-guard": "Checks that the application version matches the given Git tag."
+    },
     "scripts": {
         "test": "phpunit",
         "test-with-coverage": "phpunit --coverage-html coverage-reports",
