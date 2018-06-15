@@ -28,7 +28,7 @@ alias gub='~/.config/composer/vendor/bin/git-user-bend $@'
 ```
 
 ## Usage
-Just run the `git-user-bend whoami` CLI within a Git repository (or an argumented one) and it will allow you to view the currently used persona respectively the Git user configuration details.
+Run the `git-user-bend whoami` CLI within a Git repository (or an argumented one) and it will allow you to view the currently used persona respectively the Git user configuration details.
 
 The personas and their usage frequencies are stored in a JSON based global storage file called `.gub.personas` in the `$HOME` directory of your system.
 

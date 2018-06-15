@@ -1,6 +1,6 @@
 # How to contribute
 
-Thanks for considering to contribute to `git-user-bend`. While doing so please follow these single guidelines:
+Thanks for considering to contribute to `git-user-bend`. While doing so please follow these guidelines:
 
 - All code __MUST__ follow the PSR-2 coding standard. Please see [PSR-2](http://www.php-fig.org/psr/psr-2/) for more details.
 
