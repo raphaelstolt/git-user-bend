@@ -24,6 +24,9 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.php-cs-fixer
 
+notifications:
+  email: false
+
 before_script:
   - phpenv config-rm xdebug.ini || true
   - travis_retry composer self-update
