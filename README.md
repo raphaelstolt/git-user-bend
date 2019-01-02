@@ -3,7 +3,7 @@ git-user-bend
 [![Build Status](https://travis-ci.org/raphaelstolt/git-user-bend.svg?branch=master)](https://travis-ci.org/raphaelstolt/git-user-bend)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/raphaelstolt/git-user-bend?svg=true)](https://ci.appveyor.com/project/raphaelstolt/git-user-bend)
 [![Version](http://img.shields.io/packagist/v/stolt/git-user-bend.svg?style=flat)](https://packagist.org/packages/stolt/git-user-bend)
-![PHP Version](http://img.shields.io/badge/php-7.0+-ff69b4.svg)
+![PHP Version](http://img.shields.io/badge/php-7.1+-ff69b4.svg)
 
 The `git-user-bend` CLI is an utility tool for managing the Git user configuration (i.e. name and email) of a given Git repository. With it you can create a set of __personas__ and easily __bend__ them when doing company work, open source development, or __pair__ programming sessions.
 
