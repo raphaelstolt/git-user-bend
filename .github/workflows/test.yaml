@@ -1,0 +1,31 @@
+name: test
+
+on: push
+
+jobs:
+    test:
+        name: "PHPUnit (PHP ${{ matrix.php }})"
+        runs-on: "ubuntu-20.04"
+
+        strategy:
+            matrix:
+                php:
+                    - "8.0"
+                    - "8.1"
+                    - "8.2"
+                    - "8.3"
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "${{ matrix.php }}"
+
+            - name: Install Composer dependencies
+              run: composer update --no-progress --prefer-dist --optimize-autoloader
+
+            - name: Run tests
+              run: composer run-script test

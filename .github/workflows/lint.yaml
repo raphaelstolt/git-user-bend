@@ -1,0 +1,32 @@
+name: lint
+
+on: push
+
+jobs:
+    tests:
+        name: lint
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: true
+            matrix:
+                php:
+                    - "8.1"
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "${{ matrix.php }}"
+
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+            -   name: Check coding styles
+                run: composer run-script cs-lint
+
+            -   name: Check leanness of package
+                run: composer run-script validate-gitattributes

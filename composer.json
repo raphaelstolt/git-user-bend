@@ -1,7 +1,7 @@
 {
     "name": "stolt/git-user-bend",
     "description": "An utility tool for managing the Git user configuration.",
-    "keywords": ["git" , "user", "configuration", "cli" ],
+    "keywords": ["git" , "user", "configuration", "cli", "dev"],
     "license": "MIT",
     "authors": [
         {
@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": "^7.1",
-        "symfony/console": "^3.2"
+        "php": ">=8.0",
+        "symfony/console": "^v6.3||^v5.4.8"
     },
     "autoload": {
         "psr-4": {
@@ -40,15 +40,17 @@
         "test": "phpunit",
         "test-with-coverage": "phpunit --coverage-html coverage-reports",
         "configure-commit-template": "git config --add commit.template .gitmessage",
-        "cs-fix": "php-cs-fixer fix . -vv || true",
-        "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --dry-run",
-        "application-version-guard": "php bin/application-version --verify-tag-match"
+        "cs-fix": "php-cs-fixer fix . --allow-risky=yes -vv || true",
+        "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --dry-run --allow-risky=yes",
+        "application-version-guard": "php bin/application-version --verify-tag-match",
+        "validate-gitattributes": "lean-package-validator validate"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "mockery/mockery": "^1.0",
-        "php-mock/php-mock-phpunit": "^2.0",
-        "phpunit/phpunit": "^6.0",
+        "php-mock/php-mock-phpunit": "^2.7||^1.1",
+        "phpunit/phpunit": "^10.3||^9.6.13",
+        "stolt/lean-package-validator": "^3.2",
         "vierbergenlars/php-semver": "^3.0"
     }
 }

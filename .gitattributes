@@ -1,13 +1,12 @@
 * text=auto eol=lf
 
-.appveyor.yml export-ignore
 .editorconfig export-ignore
 .gitattributes export-ignore
+.github/ export-ignore
 .gitignore export-ignore
 .gitmessage export-ignore
 .gub export-ignore
 .php_cs export-ignore
-.travis.yml export-ignore
 bin/application-version export-ignore
 bin/release-version export-ignore
 CHANGELOG.md export-ignore
