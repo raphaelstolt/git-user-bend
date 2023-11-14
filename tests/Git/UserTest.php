@@ -2,48 +2,42 @@
 
 namespace Stolt\GitUserBend\Tests\Git;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    /**
-     * @test
-     * @group unit
-     */
-    public function canDetermineIfNameIsSet()
+    #[Test]
+    #[Group('unit')]
+    public function canDetermineIfNameIsSet(): void
     {
         $this->assertTrue((new User('John'))->hasName());
         $this->assertFalse((new User())->hasName());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function canDetermineIfEmailIsSet()
+    #[Test]
+    #[Group('unit')]
+    public function canDetermineIfEmailIsSet(): void
     {
         $this->assertTrue((new User('John', 'john.doe@example.org'))->hasEmail());
         $this->assertFalse((new User('John'))->hasEmail());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function canDetermineIfPartialsAreSet()
+    #[Test]
+    #[Group('unit')]
+    public function canDetermineIfPartialsAreSet(): void
     {
         $this->assertTrue((new User('John'))->partial());
         $this->assertTrue((new User(null, 'john.doe@example.org'))->partial());
         $this->assertFalse((new User('John', 'john.doe@example.org'))->partial());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function factorsExpectedPersona()
+    #[Test]
+    #[Group('unit')]
+    public function factorsExpectedPersona(): void
     {
         $expectedPersona = new Persona(
             Persona::REPOSITORY_USER_ALIAS,

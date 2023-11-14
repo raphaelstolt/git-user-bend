@@ -3,6 +3,10 @@
 namespace Stolt\GitUserBend\Tests\Git;
 
 use \phpmock\phpunit\PHPMock;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\Ticket;
 use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
 use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
 use Stolt\GitUserBend\Exceptions\NotADirectory;
@@ -22,7 +26,7 @@ class RepositoryTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
     }
@@ -32,7 +36,7 @@ class RepositoryTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
@@ -53,11 +57,9 @@ class RepositoryTest extends TestCase
         $repository->setDirectory($this->temporaryDirectory);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsGubDotfilePath()
+    #[Test]
+    #[Group('unit')]
+    public function returnsGubDotfilePath(): void
     {
         $expectedGubDotfilePath = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
@@ -71,11 +73,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function setsLocalRepositoryUser()
+    #[Test]
+    #[Group('unit')]
+    public function setsLocalRepositoryUser(): void
     {
         $localRepositoryUser = new User('John Doe', 'john.doe@example.org');
 
@@ -91,12 +91,10 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     * @runInSeparateProcess
-     */
-    public function returnsPersonaFromGlobalGitConfiguration()
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function returnsPersonaFromGlobalGitConfiguration(): void
     {
         $expectedRepositoryUser = new User('Jane Doe', 'jane.doe@example.org');
 
@@ -123,12 +121,10 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     * @runInSeparateProcess
-     */
-    public function returnsPersonaFromGlobalGitConfigurationOnWindows()
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function returnsPersonaFromGlobalGitConfigurationOnWindows(): void
     {
         $expectedRepositoryUser = new User('Jane Doe', 'jane.doe@example.org');
 
@@ -155,11 +151,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsPersonaFromLocalGitConfiguration()
+    #[Test]
+    #[Group('unit')]
+    public function returnsPersonaFromLocalGitConfiguration(): void
     {
         $localRepositoryUser = new User('John Doe', 'john.doe@example.org', 'jd');
         $expectedPersona = new Persona(
@@ -178,11 +172,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsPersonaFromLocalGubDotfile()
+    #[Test]
+    #[Group('unit')]
+    public function returnsPersonaFromLocalGubDotfile(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -197,11 +189,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function createsLocalGubDotfileFromPersona()
+    #[Test]
+    #[Group('unit')]
+    public function createsLocalGubDotfileFromPersona(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -228,11 +218,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function detectsPair()
+    #[Test]
+    #[Group('unit')]
+    public function detectsPair(): void
     {
         $pair = new Pair();
         $pair->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));
@@ -245,12 +233,10 @@ class RepositoryTest extends TestCase
         $this->assertTrue($repository->hasPair());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @ticket 3 (https://github.com/raphaelstolt/git-user-bend/issues/3)
-     */
-    public function doesNotDetectPairWhenOnlyEmailSet()
+    #[Test]
+    #[Group('unit')]
+    #[Ticket('https://github.com/raphaelstolt/git-user-bend/issues/3')]
+    public function doesNotDetectPairWhenOnlyEmailSet(): void
     {
         $user = new User('John Doe');
         $this->createTemporaryGitRepository($user);
@@ -260,11 +246,9 @@ class RepositoryTest extends TestCase
         $this->assertFalse($repository->hasPair());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionWhenPairUserNotResolvableFromGitConfiguration()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionWhenPairUserNotResolvableFromGitConfiguration(): void
     {
         $this->expectException(UnresolvablePair::class);
         $expectedExceptionMessage = 'Unable to resolve pair from Git configuration.';
@@ -276,11 +260,9 @@ class RepositoryTest extends TestCase
         $repository->getPairUserFromConfiguration();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedPairUserFromGitConfiguration()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedPairUserFromGitConfiguration(): void
     {
         $pair = new Pair();
         $pair->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));
@@ -296,11 +278,9 @@ class RepositoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionForNonExistentGubDotfile()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionForNonExistentGubDotfile(): void
     {
         $this->expectException(NonExistentGubDotfile::class);
         $expectedExceptionMessage = "No .gub file present in '{$this->temporaryDirectory}'.";
@@ -312,11 +292,9 @@ class RepositoryTest extends TestCase
         $repository->getPersonaFromGubDotfile();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionForInvalidGubDotfile()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionForInvalidGubDotfile(): void
     {
         $this->expectException(InvalidGubDotfile::class);
         $expectedExceptionMessage = 'Invalid .gub file content. JSON error: Syntax error.';
@@ -333,11 +311,9 @@ class RepositoryTest extends TestCase
         $repository->getPersonaFromGubDotfile();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionForInvalidGubDotfileContent()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionForInvalidGubDotfileContent(): void
     {
         $this->expectException(InvalidGubDotfile::class);
         $expectedExceptionMessage = 'Invalid .gub file content '
@@ -356,12 +332,10 @@ class RepositoryTest extends TestCase
         $repository->getPersonaFromGubDotfile();
     }
 
-    /**
-     * @test
-     * @group unit
-     * @runInSeparateProcess
-     */
-    public function throwsExpectedExceptionWhenPersonaNotResolvableFromGitConfiguration()
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function throwsExpectedExceptionWhenPersonaNotResolvableFromGitConfiguration(): void
     {
         $this->expectException(UnresolvablePersona::class);
         $this->expectExceptionMessage('Unable to resolve persona from Git configuration.');
@@ -374,11 +348,9 @@ class RepositoryTest extends TestCase
         (new Repository($this->temporaryDirectory))->getPersonaFromConfiguration();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionWhenDirectoryToSetIsNotADirectory()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionWhenDirectoryToSetIsNotADirectory(): void
     {
         $this->expectException(NotADirectory::class);
         $expectedExceptionMessage = "The directory '/out/of/orbit' doesn't exist.";
@@ -389,11 +361,9 @@ class RepositoryTest extends TestCase
         (new Repository($this->temporaryDirectory))->setDirectory('/out/of/orbit');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionWhenDirectoryToSetIsNotAGitRepository()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionWhenDirectoryToSetIsNotAGitRepository(): void
     {
         $this->expectException(NotAGitRepository::class);
         $expectedExceptionMessage = "No Git repository in '{$this->temporaryDirectory}'.";

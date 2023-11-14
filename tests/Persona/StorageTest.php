@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Persona;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Exceptions\AlreadyAliasedPersona;
 use Stolt\GitUserBend\Exceptions\DuplicateAlias;
 use Stolt\GitUserBend\Exceptions\NoDefinedPersonas;
@@ -20,7 +22,7 @@ class StorageTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
         $this->storageFile = $this->temporaryDirectory
@@ -33,18 +35,16 @@ class StorageTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function createsStorageFileForFirstPersona()
+    #[Test]
+    #[Group('unit')]
+    public function createsStorageFileForFirstPersona(): void
     {
         $storage = new Storage($this->storageFile);
         $firstPersona = new Persona('jo', 'John Doe', 'john.doe@example.org', 23);
@@ -61,11 +61,9 @@ class StorageTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function addsPersonaToExistingPersonas()
+    #[Test]
+    #[Group('unit')]
+    public function addsPersonaToExistingPersonas(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":23},
@@ -91,11 +89,9 @@ CONTENT;
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function addsAnAliasOnlyOnce()
+    #[Test]
+    #[Group('unit')]
+    public function addsAnAliasOnlyOnce(): void
     {
         $this->expectException(DuplicateAlias::class);
         $this->expectExceptionMessage("The alias 'jd' is already present.");
@@ -112,11 +108,9 @@ CONTENT;
         $storage->add($additionalPersona);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function addsAPersonaOnlyOnce()
+    #[Test]
+    #[Group('unit')]
+    public function addsAPersonaOnlyOnce(): void
     {
         $this->expectException(AlreadyAliasedPersona::class);
         $this->expectExceptionMessage("The persona is already aliased to 'jado'.");
@@ -133,11 +127,9 @@ CONTENT;
         $storage->add($additionalPersona);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsEmptyCollectionOnNonExistentStorageFile()
+    #[Test]
+    #[Group('unit')]
+    public function returnsEmptyCollectionOnNonExistentStorageFile(): void
     {
         $storage = new Storage($this->storageFile);
         $personas = $storage->all();
@@ -146,11 +138,9 @@ CONTENT;
         $this->assertEquals(0, $personas->count());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsAllExistingPersonasOrderedByUsageFrequency()
+    #[Test]
+    #[Group('unit')]
+    public function returnsAllExistingPersonasOrderedByUsageFrequency(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":5},
@@ -176,11 +166,9 @@ CONTENT;
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function removesExistingPersonaByAlias()
+    #[Test]
+    #[Group('unit')]
+    public function removesExistingPersonaByAlias(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":5},
@@ -208,11 +196,9 @@ CONTENT;
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function lastPersonaRemovalDeletesStorageFile()
+    #[Test]
+    #[Group('unit')]
+    public function lastPersonaRemovalDeletesStorageFile(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":5}]
@@ -220,16 +206,14 @@ CONTENT;
         $this->createTemporaryStorageFile($existingStorageContent);
         $storage = new Storage($this->storageFile);
 
-        $removedAPersona = $storage->remove('jo');
+        $storage->remove('jo');
 
-        $this->assertFileNotExists($this->storageFile);
+        $this->assertFalse(\file_exists($this->storageFile));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function removeOnUndefinedPersonasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function removeOnUndefinedPersonasThrowsExpectedException(): void
     {
         $this->expectException(NoDefinedPersonas::class);
         $this->expectExceptionMessage('There are no defined personas.');
@@ -238,11 +222,9 @@ CONTENT;
         $storage->remove('so');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function removeOnUnknownPersonasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function removeOnUnknownPersonasThrowsExpectedException(): void
     {
         $this->expectException(UnknownPersona::class);
         $this->expectExceptionMessage("No known persona for alias 'so'.");
@@ -258,11 +240,9 @@ CONTENT;
         $storage->remove('so');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function incrementsUsageFrequencyByAlias()
+    #[Test]
+    #[Group('unit')]
+    public function incrementsUsageFrequencyByAlias(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":5},
@@ -280,11 +260,9 @@ CONTENT;
         $this->assertEquals(24, $sarah->getUsageFrequency());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function incrementUsageFrequencyOnUndefinedPersonasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function incrementUsageFrequencyOnUndefinedPersonasThrowsExpectedException(): void
     {
         $this->expectException(NoDefinedPersonas::class);
         $this->expectExceptionMessage('There are no defined personas.');
@@ -293,11 +271,9 @@ CONTENT;
         $storage->incrementUsageFrequency('so');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function incrementUsageFrequencyOnUnknownPersonasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function incrementUsageFrequencyOnUnknownPersonasThrowsExpectedException(): void
     {
         $this->expectException(UnknownPersona::class);
         $this->expectExceptionMessage("No known persona for alias 'so'.");

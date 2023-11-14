@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Commands;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\WhoamiCommand;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
@@ -22,7 +24,7 @@ class WhoamiCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -47,7 +49,7 @@ class WhoamiCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
@@ -58,7 +60,7 @@ class WhoamiCommandTest extends TestCase
      * @param  Stolt\GitUserBend\Git\User $user
      * @return void
      */
-    protected function setApplication(User $user = null)
+    protected function setApplication(User $user = null): void
     {
         if ($user === null) {
             $this->createTemporaryGitRepository(new User('John Doe', 'john.doe@example.org'));
@@ -77,7 +79,7 @@ class WhoamiCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $application->add(new WhoamiCommand(
@@ -88,11 +90,9 @@ class WhoamiCommandTest extends TestCase
         return $application;
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedUnaliasedPersona()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedUnaliasedPersona(): void
     {
         $this->setApplication();
 
@@ -109,14 +109,12 @@ The current unaliased persona is John Doe <john.doe@example.org>.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedAliasedPersona()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedAliasedPersona(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -140,14 +138,12 @@ The current persona is jo ~ John Doe <john.doe@example.org>.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedPair()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedPair(): void
     {
         $pair = new Pair();
         $pair->add(new Persona('ja', 'Jane Doe', 'jane.doe@example.org'));
@@ -169,14 +165,12 @@ The current pair is Jane Doe, John Doe, and Sarah Doe <jane.doe@example.org>.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
         $application = $this->getApplication();
 
@@ -196,11 +190,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
         $application = $this->getApplication();
 

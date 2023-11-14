@@ -149,7 +149,7 @@ class TestCase extends PHPUnitTestCase
      *
      * @return array
      */
-    public function invalidAliases()
+    public static function invalidAliases(): array
     {
         $maxAliasLength = Persona::MAX_ALIAS_LENGTH;
         $tooLongAlias = str_repeat("a", Persona::MAX_ALIAS_LENGTH + 1);

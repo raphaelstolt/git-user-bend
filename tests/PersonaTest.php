@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
@@ -13,7 +15,7 @@ class PersonaTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
     }
@@ -23,18 +25,16 @@ class PersonaTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function factorsGitUser()
+    #[Test]
+    #[Group('unit')]
+    public function factorsGitUser(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org', 17);
         $gitUser = $persona->factorUser();
@@ -44,11 +44,9 @@ class PersonaTest extends TestCase
         $this->assertEquals($persona->getEmail(), $gitUser->getEmail());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function invalidPersonaThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function invalidPersonaThrowsExpectedException(): void
     {
         $this->expectException(InvalidPersona::class);
         $this->expectExceptionMessage("Persona has an invalid email address 'www.example.org'.");
@@ -56,11 +54,9 @@ class PersonaTest extends TestCase
         new Persona('jo', 'John Doe', 'www.example.org');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function invalidPersonaWithTooLongAliasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function invalidPersonaWithTooLongAliasThrowsExpectedException(): void
     {
         $this->expectException(InvalidPersona::class);
         $this->expectExceptionMessage('Persona alias is longer than 20 characters.');
@@ -69,33 +65,27 @@ class PersonaTest extends TestCase
         new Persona($tooLongAlias, 'John Doe', 'john.doe@example.org');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function johnIsConsideredAsAValidPersona()
+    #[Test]
+    #[Group('unit')]
+    public function johnIsConsideredAsAValidPersona(): void
     {
         $john = new Persona('jo', 'John Doe', 'john.doe@example.org', 17);
 
         $this->assertEquals('jo', $john->getAlias());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function personaWithPrivateGitHubEmailIsConsideredAsAValidPersona()
+    #[Test]
+    #[Group('unit')]
+    public function personaWithPrivateGitHubEmailIsConsideredAsAValidPersona(): void
     {
         $john = new Persona('jo', 'John Doe', 'johndoe@users.noreply.github.com', 17);
 
         $this->assertEquals('jo', $john->getAlias());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function createsPersonaFromGitRepository()
+    #[Test]
+    #[Group('unit')]
+    public function createsPersonaFromGitRepository(): void
     {
         $expectedRepositoryUser = new User('John Doe', 'john.doe@example.org');
 
@@ -112,11 +102,9 @@ class PersonaTest extends TestCase
         $this->assertEquals($expectedPersona, Persona::fromRepository($repository));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function cannotCreateInvalidPersonaFromMisconfiguredGitRepository()
+    #[Test]
+    #[Group('unit')]
+    public function cannotCreateInvalidPersonaFromMisconfiguredGitRepository(): void
     {
         $this->expectException(InvalidPersona::class);
         $this->expectExceptionMessage("Persona has an invalid email address 'abc'.");
@@ -129,11 +117,9 @@ class PersonaTest extends TestCase
         Persona::fromRepository($repository);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedJsonSerialization()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedJsonSerialization(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org', 17);
 
@@ -147,11 +133,9 @@ class PersonaTest extends TestCase
 
         $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($persona));
     }
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedGubFileSerialization()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedGubFileSerialization(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org');
 
@@ -167,11 +151,9 @@ class PersonaTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedStringRepresentation()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedStringRepresentation(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org', 17);
 
@@ -181,11 +163,9 @@ class PersonaTest extends TestCase
         $this->assertEquals($expectedString, $persona);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedStringRepresentationForPersonaCreatedFromRepositoryUser()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedStringRepresentationForPersonaCreatedFromRepositoryUser(): void
     {
         $persona = new Persona(
             Persona::REPOSITORY_USER_ALIAS,
@@ -199,11 +179,9 @@ class PersonaTest extends TestCase
         $this->assertEquals($expectedString, $persona);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function personasAreCompareable()
+    #[Test]
+    #[Group('unit')]
+    public function personasAreCompareable(): void
     {
         $john = new Persona(
             'john',

@@ -3,6 +3,8 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use \phpmock\phpunit\PHPMock;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\PersonasCommand;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Tests\CommandTester;
@@ -21,7 +23,7 @@ class PersonasCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $application->add(new PersonasCommand(new Storage(STORAGE_FILE)));
@@ -32,7 +34,7 @@ class PersonasCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -59,18 +61,16 @@ class PersonasCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoPersonasDefined()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoPersonasDefined(): void
     {
         $command = $this->application->find('personas');
         $commandTester = new CommandTester($command);
@@ -87,11 +87,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedPersonas()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedPersonas(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -116,14 +114,12 @@ CONTENT;
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoStorageFilePresent()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoStorageFilePresent(): void
     {
         $command = $this->application->find('personas');
         $commandTester = new CommandTester($command);
@@ -141,11 +137,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedReturnCodeWhenOpeningAnEditor()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedReturnCodeWhenOpeningAnEditor(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -167,6 +161,6 @@ CONTENT;
         ]);
 
         $this->assertEmpty($commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 }

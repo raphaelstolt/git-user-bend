@@ -52,13 +52,8 @@ class PersonasCommand extends Command
 
     /**
      * Execute command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('edit')) {
             $editor = escapeshellcmd(getenv('EDITOR'));
@@ -102,6 +97,7 @@ class PersonasCommand extends Command
         }
 
         $this->renderTable($output, $personas);
+        return self::SUCCESS;
     }
 
     /**

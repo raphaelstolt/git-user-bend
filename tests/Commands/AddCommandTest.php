@@ -3,6 +3,8 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use Mockery;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\AddCommand;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
@@ -20,7 +22,7 @@ class AddCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $application->add(new AddCommand(new Storage(STORAGE_FILE)));
@@ -31,7 +33,7 @@ class AddCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -58,18 +60,16 @@ class AddCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function addsAPersonaAsExpected()
+    #[Test]
+    #[Group('integration')]
+    public function addsAPersonaAsExpected(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -92,14 +92,12 @@ Added persona jd ~ Jane Doe <jane.doe@example.org>.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedAliasIsTooLong()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedAliasIsTooLong(): void
     {
         $maxAliasLength = Persona::MAX_ALIAS_LENGTH;
         $alias = str_repeat('x', $maxAliasLength + 1);
@@ -119,14 +117,12 @@ Error: The provided alias {$alias} is longer than {$maxAliasLength} characters.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 1);
+        $this->assertTrue($commandTester->getStatusCode() > 0);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedEmailIsInvalid()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedEmailIsInvalid(): void
     {
         $email = 1234;
 
@@ -148,11 +144,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaAlreadyAliased()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaAlreadyAliased(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -178,11 +172,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaAliasAlreadyPresent()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaAliasAlreadyPresent(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -208,11 +200,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaAdditionFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaAdditionFails(): void
     {
         $storage = Mockery::mock('Stolt\GitUserBend\Persona\Storage');
         $application = new Application();

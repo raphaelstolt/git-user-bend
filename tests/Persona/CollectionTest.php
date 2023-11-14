@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Persona;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Stolt\GitUserBend\Exceptions\AlreadyAliasedPersona;
 use Stolt\GitUserBend\Exceptions\DuplicateAlias;
@@ -13,11 +15,9 @@ use Stolt\GitUserBend\Persona\Pair;
 
 class CollectionTest extends TestCase
 {
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsExpectedJsonSerialization()
+    #[Test]
+    #[Group('unit')]
+    public function returnsExpectedJsonSerialization(): void
     {
         $collection = new Collection();
         $collection->add(new Persona('jo', 'John Doe', 'john.doe@example.org', 10));
@@ -31,11 +31,9 @@ CONTENT;
         $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($collection));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function aliasLookupOnEmptyCollectionThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function aliasLookupOnEmptyCollectionThrowsExpectedException(): void
     {
         $this->expectException(NoDefinedPersonas::class);
         $this->expectExceptionMessage('There are no defined personas.');
@@ -43,11 +41,9 @@ CONTENT;
         $collection = (new Collection())->getByAlias('fo');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function aliasLookupOnUnknownPersonaThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function aliasLookupOnUnknownPersonaThrowsExpectedException(): void
     {
         $this->expectException(UnknownPersona::class);
         $this->expectExceptionMessage("No known persona for alias 'fo'.");
@@ -57,11 +53,9 @@ CONTENT;
         $collection = $collection->getByAlias('fo');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function duplicateAliasAdditionThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function duplicateAliasAdditionThrowsExpectedException(): void
     {
         $this->expectException(DuplicateAlias::class);
         $this->expectExceptionMessage("The alias 'jd' is already present.");
@@ -71,11 +65,9 @@ CONTENT;
         $collection->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function personaAlreadyAliasedThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function personaAlreadyAliasedThrowsExpectedException(): void
     {
         $this->expectException(AlreadyAliasedPersona::class);
         $this->expectExceptionMessage("The persona is already aliased to 'jd'.");
@@ -85,11 +77,9 @@ CONTENT;
         $collection->add(new Persona('jodo', 'John Doe', 'john.doe@example.org'));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function removePersonaByAlias()
+    #[Test]
+    #[Group('unit')]
+    public function removePersonaByAlias(): void
     {
         $collection = new Collection();
         $expectedSolePersona = new Persona('jd', 'John Doe', 'john.doe@example.org');
@@ -102,11 +92,9 @@ CONTENT;
         $this->assertEquals($expectedSolePersona, $collection->getByAlias('jd'));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsPersonasOrderedByUsageFrequency()
+    #[Test]
+    #[Group('unit')]
+    public function returnsPersonasOrderedByUsageFrequency(): void
     {
         $collection = new Collection();
 
@@ -130,11 +118,9 @@ CONTENT;
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsPairForAliases()
+    #[Test]
+    #[Group('unit')]
+    public function returnsPairForAliases(): void
     {
         $collection = new Collection();
 
@@ -150,11 +136,9 @@ CONTENT;
         $this->assertEquals(2, $pair->count());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsTrueForAliasedPersona()
+    #[Test]
+    #[Group('unit')]
+    public function returnsTrueForAliasedPersona(): void
     {
         $collection = new Collection();
 
@@ -172,11 +156,9 @@ CONTENT;
         $this->assertTrue($collection->hasAliasedPersona($aliasedPersona));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsFalseForNonAliasedPersona()
+    #[Test]
+    #[Group('unit')]
+    public function returnsFalseForNonAliasedPersona(): void
     {
         $collection = new Collection();
 
@@ -194,11 +176,9 @@ CONTENT;
         $this->assertFalse($collection->hasAliasedPersona($nonAliasedPersona));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnsFalseForNonAliasedPersonaOnEmptyCollection()
+    #[Test]
+    #[Group('unit')]
+    public function returnsFalseForNonAliasedPersonaOnEmptyCollection(): void
     {
         $collection = new Collection();
 
@@ -210,11 +190,9 @@ CONTENT;
         $this->assertFalse($collection->hasAliasedPersona($nonAliasedPersona));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function findsPersonaByNameAndEmail()
+    #[Test]
+    #[Group('unit')]
+    public function findsPersonaByNameAndEmail(): void
     {
         $collection = new Collection();
 
@@ -230,11 +208,9 @@ CONTENT;
         );
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function lookupWithNameAndEmailOnEmptyCollectionThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function lookupWithNameAndEmailOnEmptyCollectionThrowsExpectedException(): void
     {
         $this->expectException(NoDefinedPersonas::class);
         $this->expectExceptionMessage('There are no defined personas.');
@@ -243,11 +219,9 @@ CONTENT;
         $collection->getByNameAndEmail('Jane Doe', 'jane.doe@example.org');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function lookupWithNameAndEmailWithNoMatchThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function lookupWithNameAndEmailWithNoMatchThrowsExpectedException(): void
     {
         $this->expectException(UnknownPersona::class);
         $expectedExceptionMessage = "No known persona for name 'Jane Doe' "

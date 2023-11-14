@@ -3,6 +3,9 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\ImportCommand;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
@@ -22,7 +25,7 @@ class ImportCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $command = new ImportCommand(
@@ -38,7 +41,7 @@ class ImportCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -65,18 +68,16 @@ class ImportCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
         $command = $this->application->find('import');
         $commandTester = new CommandTester($command);
@@ -94,11 +95,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
         $command = $this->application->find('import');
         $commandTester = new CommandTester($command);
@@ -116,11 +115,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoGubDotfilePresent()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoGubDotfilePresent(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -141,17 +138,16 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenGubDotfileInvalid()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenGubDotfileInvalid(): void
     {
         $this->createTemporaryGitRepository();
 
         $temporaryGubFile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
+
         file_put_contents($temporaryGubFile, '{"ALIAS":"jd","NAME":"John Doe"}');
 
         $command = $this->application->find('import');
@@ -162,18 +158,15 @@ CONTENT;
             '--from-dotfile' => true,
         ]);
 
-        $this->assertContains(
-            'Invalid ' . Repository::GUB_FILENAME . ' file content',
-            $commandTester->getDisplay()
+        $this->assertTrue(
+            str_contains($commandTester->getDisplay(), 'Invalid ' . Repository::GUB_FILENAME . ' file content')
         );
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function importsAPersonaFromALocalGubDotfileIntoNonExistentStorage()
+    #[Test]
+    #[Group('integration')]
+    public function importsAPersonaFromALocalGubDotfileIntoNonExistentStorage(): void
     {
         $personaToImport = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
@@ -198,14 +191,12 @@ Imported persona {$personaToImport} from {$localGubDotfile}.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenAliasFromGubDotfileAlreadyPresent()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenAliasFromGubDotfileAlreadyPresent(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -235,11 +226,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyAliased()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyAliased(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -269,11 +258,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenImportFromGubDotfileFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenImportFromGubDotfileFails(): void
     {
         $this->createTemporaryGitRepository();
         $personaToImport = new Persona('jd', 'John Doe', 'john.doe@example.org');
@@ -312,11 +299,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function importsAPersonaFromALocalGitConfigurationIntoNonExistentStorage()
+    #[Test]
+    #[Group('integration')]
+    public function importsAPersonaFromALocalGitConfigurationIntoNonExistentStorage(): void
     {
         $userToImport = new User('John Doe', 'john.doe@example.org', 'jd');
 
@@ -338,14 +323,12 @@ Imported persona from $localDirectory.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenImportFromLocalGitConfigurationFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenImportFromLocalGitConfigurationFails(): void
     {
         $this->createTemporaryGitRepository();
         $personaToImport = new Persona('jd', 'John Doe', 'john.doe@example.org');
@@ -378,11 +361,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoAliasForLocalGitConfigurationProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoAliasForLocalGitConfigurationProvided(): void
     {
         $userToImport = new User('John Doe', 'john.doe@example.org', 'jd');
 
@@ -404,11 +385,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenAliasAlreadyUsed()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenAliasAlreadyUsed(): void
     {
         $existingPersona = new Persona('jd', 'John Doe', 'john.doe@example.org');
         $this->createTemporaryGitRepository($existingPersona->factorUser());
@@ -438,14 +417,10 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     * @param string $invalidAlias
-     * @param string $expectedError
-     * @dataProvider invalidAliases
-     */
-    public function returnsExpectedWarningWhenAliasArgumentIsInvalid($invalidAlias, $expectedError)
+    #[Test]
+    #[Group('integration')]
+    #[DataProvider('invalidAliases')]
+    public function returnsExpectedWarningWhenAliasArgumentIsInvalid(string $invalidAlias, string $expectedError): void
     {
         $this->createTemporaryGitRepository();
 

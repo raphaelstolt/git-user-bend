@@ -3,6 +3,9 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\RetireCommand;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Collection;
@@ -21,7 +24,7 @@ class RetireCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $application->add(new RetireCommand(new Storage(STORAGE_FILE)));
@@ -32,7 +35,7 @@ class RetireCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -59,18 +62,16 @@ class RetireCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function retiresAPersonaAsExpected()
+    #[Test]
+    #[Group('integration')]
+    public function retiresAPersonaAsExpected(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -91,14 +92,12 @@ Retired persona jo ~ John Doe <john.doe@example.org>.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaRetirementFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaRetirementFails(): void
     {
         $storage = Mockery::mock('Stolt\GitUserBend\Persona\Storage');
         $application = new Application();
@@ -128,11 +127,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaAliasNotKnown()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaAliasNotKnown(): void
     {
         $existingStorageContent = <<<CONTENT
 [{"alias":"jd","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
@@ -156,11 +153,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoPersonasDefined()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoPersonasDefined(): void
     {
         $command = $this->application->find('retire');
         $commandTester = new CommandTester($command);
@@ -178,14 +173,10 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     * @param string $invalidAlias
-     * @param string $expectedError
-     * @dataProvider invalidAliases
-     */
-    public function returnsExpectedWarningWhenAliasArgumentIsInvalid($invalidAlias, $expectedError)
+    #[Test]
+    #[Group('integration')]
+    #[DataProvider('invalidAliases')]
+    public function returnsExpectedWarningWhenAliasArgumentIsInvalid(string $invalidAlias, string $expectedError): void
     {
         $this->createTemporaryGitRepository();
 

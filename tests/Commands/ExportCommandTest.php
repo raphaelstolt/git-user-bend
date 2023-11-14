@@ -3,6 +3,9 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\ExportCommand;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Persona;
@@ -21,7 +24,7 @@ class ExportCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $command = new ExportCommand(
@@ -37,7 +40,7 @@ class ExportCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -64,18 +67,16 @@ class ExportCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
         $command = $this->application->find('export');
         $commandTester = new CommandTester($command);
@@ -94,11 +95,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
         $command = $this->application->find('export');
         $commandTester = new CommandTester($command);
@@ -117,11 +116,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoPersonasDefined()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoPersonasDefined(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -141,11 +138,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaAliasNotKnown()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaAliasNotKnown(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -171,11 +166,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function exportsAPersonaAsExpected()
+    #[Test]
+    #[Group('integration')]
+    public function exportsAPersonaAsExpected(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -211,15 +204,13 @@ CONTENT;
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
         $this->assertStringEqualsFile($expectedGubDotfile, $expectedGubDotfileContent);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenCreateGubDotfileFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenCreateGubDotfileFails(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -254,11 +245,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenExportPersonaAlreadyInGubDotfile()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenExportPersonaAlreadyInGubDotfile(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -291,14 +280,10 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     * @param string $invalidAlias
-     * @param string $expectedError
-     * @dataProvider invalidAliases
-     */
-    public function returnsExpectedWarningWhenAliasArgumentIsInvalid($invalidAlias, $expectedError)
+    #[Test]
+    #[Group('integration')]
+    #[DataProvider('invalidAliases')]
+    public function returnsExpectedWarningWhenAliasArgumentIsInvalid(string $invalidAlias, string $expectedError): void
     {
         $this->createTemporaryGitRepository();
 

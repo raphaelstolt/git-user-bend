@@ -59,13 +59,8 @@ class WhoamiCommand extends Command
 
     /**
      * Execute command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $directory = $input->getArgument('directory');
 
@@ -79,7 +74,7 @@ class WhoamiCommand extends Command
                     . "</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             $persona = Persona::fromRepository($this->repository);
@@ -98,6 +93,8 @@ class WhoamiCommand extends Command
             }
 
             $output->writeln($outputContent);
+
+            return self::SUCCESS;
         } catch (Exception $e) {
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);

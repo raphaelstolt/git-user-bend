@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Persona;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use \RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Stolt\GitUserBend\Exceptions\AlreadyAliasedPersona;
@@ -12,11 +14,9 @@ use Stolt\GitUserBend\Persona\Pair;
 
 class PairTest extends TestCase
 {
-    /**
-     * @test
-     * @group unit
-     */
-    public function duplicateAliasAdditionThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function duplicateAliasAdditionThrowsExpectedException(): void
     {
         $this->expectException(DuplicateAlias::class);
         $this->expectExceptionMessage("The alias 'jd' is already present.");
@@ -26,11 +26,9 @@ class PairTest extends TestCase
         $pair->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function personaAlreadyAliasedThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function personaAlreadyAliasedThrowsExpectedException(): void
     {
         $this->expectException(AlreadyAliasedPersona::class);
         $this->expectExceptionMessage("The persona is already aliased to 'jd'.");
@@ -40,11 +38,9 @@ class PairTest extends TestCase
         $pair->add(new Persona('jodo', 'John Doe', 'john.doe@example.org'));
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function factorUserOnNonSetPersonasThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function factorUserOnNonSetPersonasThrowsExpectedException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No personas to factor user from.');
@@ -52,11 +48,9 @@ class PairTest extends TestCase
         (new Pair())->factorUser();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function factorUserOnSinglePersonaThrowsExpectedException()
+    #[Test]
+    #[Group('unit')]
+    public function factorUserOnSinglePersonaThrowsExpectedException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Not enough personas to factor user from.');
@@ -66,11 +60,9 @@ class PairTest extends TestCase
         $pair->factorUser();
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function factorsExpectedUsers()
+    #[Test]
+    #[Group('unit')]
+    public function factorsExpectedUsers(): void
     {
         $pair = new Pair();
         $pair->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));
@@ -95,11 +87,9 @@ class PairTest extends TestCase
         $this->assertEquals($expectedGitUser, $pair->factorUser());
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function toStringCreatesExpectedFormat()
+    #[Test]
+    #[Group('unit')]
+    public function toStringCreatesExpectedFormat(): void
     {
         $pair = new Pair();
         $pair->add(new Persona('jd', 'John Doe', 'john.doe@example.org'));

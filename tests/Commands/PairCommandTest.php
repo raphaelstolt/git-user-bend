@@ -3,6 +3,8 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use \Mockery;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\PairCommand;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Persona;
@@ -22,7 +24,7 @@ class PairCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $command = new PairCommand(
@@ -38,7 +40,7 @@ class PairCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -65,18 +67,16 @@ class PairCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
         $command = $this->application->find('pair');
         $commandTester = new CommandTester($command);
@@ -95,11 +95,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
         $command = $this->application->find('pair');
         $commandTester = new CommandTester($command);
@@ -118,11 +116,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenOnlySinglePersonaAliasProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenOnlySinglePersonaAliasProvided(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -143,11 +139,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoPersonasDefined()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoPersonasDefined(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -168,11 +162,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenUnknownPersonaAliasProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenUnknownPersonaAliasProvided(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -199,11 +191,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenSetPairPersonaFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenSetPairPersonaFails(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -237,11 +227,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function setsPairPersonasAndIncrementsUsageFrequencies()
+    #[Test]
+    #[Group('integration')]
+    public function setsPairPersonasAndIncrementsUsageFrequencies(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -265,7 +253,7 @@ Set pair 'John Doe and Some One <john.doe@example.org>'.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
 
         $this->assertEquals(12, $this->getUsageFrequency('jd'));
         $this->assertEquals(24, $this->getUsageFrequency('so'));

@@ -3,6 +3,9 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use \Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\UseCommand;
 use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
@@ -24,7 +27,7 @@ class UseCommandTest extends TestCase
     /**
      * @return \Symfony\Component\Console\Application
      */
-    protected function getApplication()
+    protected function getApplication(): Application
     {
         $application = new Application();
         $command = new UseCommand(
@@ -40,7 +43,7 @@ class UseCommandTest extends TestCase
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTemporaryDirectory();
 
@@ -67,18 +70,16 @@ class UseCommandTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (is_dir($this->temporaryDirectory)) {
             $this->removeDirectory($this->temporaryDirectory);
         }
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
@@ -96,11 +97,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
@@ -118,11 +117,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoPersonasDefined()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoPersonasDefined(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -159,11 +156,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenUnknownPersonaAliasProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenUnknownPersonaAliasProvided(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -206,11 +201,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenOnlySinglePersonaAliasProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenOnlySinglePersonaAliasProvided(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -231,11 +224,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenNoGubDotfilePresent()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenNoGubDotfilePresent(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -256,11 +247,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenGubDotfileInvalid()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenGubDotfileInvalid(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -288,11 +277,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyInUse()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPersonaFromGubDotfileAlreadyInUse(): void
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
@@ -316,10 +303,8 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
+    #[Test]
+    #[Group('integration')]
     public function usesPersonaFromGubDotfile()
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
@@ -345,14 +330,12 @@ Set {$persona} from {$localGubDotfile}.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function usesPersonaFromGubDotfileAndIncrementsUsageFrequencyIfInStorage()
+    #[Test]
+    #[Group('integration')]
+    public function usesPersonaFromGubDotfileAndIncrementsUsageFrequencyIfInStorage(): void
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
@@ -383,16 +366,14 @@ Set {$persona} from {$localGubDotfile}.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
 
         $this->assertEquals(13, $this->getUsageFrequency($persona->getAlias()));
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenUseFromGubDotfileFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenUseFromGubDotfileFails(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -435,11 +416,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenAliasArgumentNotProvided()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenAliasArgumentNotProvided(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -459,14 +438,10 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     * @param string $invalidAlias
-     * @param string $expectedError
-     * @dataProvider invalidAliases
-     */
-    public function returnsExpectedWarningWhenAliasArgumentIsInvalid($invalidAlias, $expectedError)
+    #[Test]
+    #[Group('integration')]
+    #[DataProvider('invalidAliases')]
+    public function returnsExpectedWarningWhenAliasArgumentIsInvalid(string $invalidAlias, string $expectedError): void
     {
         $this->createTemporaryGitRepository();
 
@@ -493,11 +468,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenAliasAlreadyInUse()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenAliasAlreadyInUse(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org');
 
@@ -526,11 +499,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function usesPersonaAndIncrementsUsageFrequency()
+    #[Test]
+    #[Group('integration')]
+    public function usesPersonaAndIncrementsUsageFrequency(): void
     {
         $persona = new Persona('jo', 'John Doe', 'john.doe@example.org');
 
@@ -556,16 +527,14 @@ Set persona {$persona}.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
 
         $this->assertEquals(12, $this->getUsageFrequency($persona->getAlias()));
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenUseOfAliasFails()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenUseOfAliasFails(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -602,11 +571,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenPairAlreadyInUse()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenPairAlreadyInUse(): void
     {
         $persona = new Persona('jo', 'John Doe and Jane Doe', 'john.doe@example.org');
 
@@ -635,11 +602,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function returnsExpectedWarningWhenAliasAndAliasesArgumentsAreUsedTogether()
+    #[Test]
+    #[Group('integration')]
+    public function returnsExpectedWarningWhenAliasAndAliasesArgumentsAreUsedTogether(): void
     {
         $this->createTemporaryGitRepository();
 
@@ -667,11 +632,9 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == 1);
     }
 
-    /**
-     * @test
-     * @group integration
-     */
-    public function usesPairAndIncrementsUsageFrequencies()
+    #[Test]
+    #[Group('integration')]
+    public function usesPairAndIncrementsUsageFrequencies(): void
     {
         $john = new Persona('jo', 'John Doe', 'john.doe@example.org');
         $jane = new Persona('ja', 'Jane Doe', 'jane.doe@example.org');
@@ -704,7 +667,7 @@ Set pair {$pair}.
 CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
-        $this->assertTrue($commandTester->getStatusCode() == 0);
+        $commandTester->assertCommandIsSuccessful();
 
         $this->assertEquals(12, $this->getUsageFrequency($john->getAlias()));
         $this->assertEquals(24, $this->getUsageFrequency($jane->getAlias()));
