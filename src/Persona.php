@@ -55,8 +55,8 @@ class Persona implements \JsonSerializable
     }
 
     /**
-     * @return void
      * @throws InvalidPersona
+     * @return void
      */
     private function guardValidity()
     {

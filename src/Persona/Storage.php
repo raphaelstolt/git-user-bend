@@ -45,9 +45,9 @@ class Storage
      * storage file is deleted.
      *
      * @param  string $alias The alias of the persona to remove.
-     * @return boolean
      * @throws NoDefinedPersonas
      * @throws UnknownPersona
+     * @return boolean
      */
     public function remove(string $alias): bool
     {

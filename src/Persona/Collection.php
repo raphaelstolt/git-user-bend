@@ -62,9 +62,9 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
 
     /**
      * @param  string $alias The alias of the persona to remove.
-     * @return void
      * @throws NoDefinedPersonas
      * @throws UnknownPersona
+     * @return void
      */
     public function removeByAlias(string $alias)
     {
@@ -79,9 +79,9 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
 
     /**
      * @param  string $alias The alias to look up.
-     * @return Persona
      * @throws NoDefinedPersonas
      * @throws UnknownPersona
+     * @return Persona
      */
     public function getByAlias(string $alias): Persona
     {
@@ -101,9 +101,9 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
     /**
      * @param  string $name The name to look up.
      * @param  string $email The email to look up.
-     * @return Persona
      * @throws NoDefinedPersonas
      * @throws UnknownPersona
+     * @return Persona
      */
     public function getByNameAndEmail(string $name, string $email): Persona
     {
@@ -154,9 +154,9 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
      * Populates and returns a pair of personas.
      *
      * @param  array $aliases The aliases of the pair to be.
-     * @return Pair
      * @throws NoDefinedPersonas
      * @throws UnknownPersona
+     * @return Pair
      */
     public function pair(array $aliases): Pair
     {

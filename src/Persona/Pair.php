@@ -52,8 +52,8 @@ class Pair implements Countable, IteratorAggregate
     }
 
     /**
-     * @return Stolt\GitUserBend\Git\User
      * @throws \RuntimeException
+     * @return Stolt\GitUserBend\Git\User
      */
     public function factorUser(): User
     {

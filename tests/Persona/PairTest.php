@@ -2,9 +2,9 @@
 
 namespace Stolt\GitUserBend\Tests\Persona;
 
+use \RuntimeException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use \RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Stolt\GitUserBend\Exceptions\AlreadyAliasedPersona;
 use Stolt\GitUserBend\Exceptions\DuplicateAlias;

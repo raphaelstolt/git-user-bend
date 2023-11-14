@@ -102,9 +102,9 @@ class Repository
     }
 
     /**
-     * @return Stolt\GitUserBend\Persona
      * @throws InvalidGubDotfile
      * @throws NonExistentGubDotfile
+     * @return Stolt\GitUserBend\Persona
      */
     public function getPersonaFromGubDotfile()
     {
@@ -146,8 +146,8 @@ class Repository
     }
 
     /**
-     * @return Stolt\GitUserBend\Persona
      * @throws UnresolvablePersona
+     * @return Stolt\GitUserBend\Persona
      */
     public function getPersonaFromConfiguration(): Persona
     {
@@ -185,8 +185,8 @@ class Repository
     }
 
     /**
-     * @return Stolt\GitUserBend\Git\User
      * @throws UnresolvablePair
+     * @return Stolt\GitUserBend\Git\User
      */
     public function getPairUserFromConfiguration(): User
     {

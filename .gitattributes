@@ -6,7 +6,7 @@
 .gitignore export-ignore
 .gitmessage export-ignore
 .gub export-ignore
-.php_cs export-ignore
+.php-cs-fixer.php export-ignore
 bin/application-version export-ignore
 bin/release-version export-ignore
 CHANGELOG.md export-ignore

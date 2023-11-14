@@ -118,8 +118,8 @@ class User
     }
 
     /**
-     * @return Stolt\GitUserBend\Persona
      * @throws Stolt\GitUserBend\Exceptions\InvalidPersona
+     * @return Stolt\GitUserBend\Persona
      */
     public function factorPersona(): Persona
     {

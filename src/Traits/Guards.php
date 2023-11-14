@@ -14,8 +14,8 @@ trait Guards
 {
     /**
      * @param  string $alias
-     * @return string
      * @throws Stolt\GitUserBend\Exceptions\InvalidAlias
+     * @return string
      */
     public function guardAlias(string $alias)
     {
@@ -36,10 +36,10 @@ trait Guards
 
     /**
      * @param  string $aliases
-     * @return array
      * @throws Stolt\GitUserBend\Exceptions\Exception
      * @throws Stolt\GitUserBend\Exceptions\NoDefinedPersonas
      * @throws Stolt\GitUserBend\Exceptions\UnknownPersona
+     * @return array
      */
     private function guardAliases($aliases)
     {
@@ -60,8 +60,8 @@ trait Guards
 
     /**
      * @param  string $alias
-     * @return string
      * @throws Stolt\GitUserBend\Exceptions\Exception
+     * @return string
      */
     public function guardRequiredAlias($alias)
     {
@@ -74,8 +74,8 @@ trait Guards
 
     /**
      * @param  string $email
-     * @return void
      * @throws Stolt\GitUserBend\Exceptions\InvalidEmail
+     * @return void
      */
     public function guardEmail(string $email)
     {
