@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Stolt\GitUserBend\Persona;
 
 use Stolt\GitUserBend\Exceptions\NoDefinedPersonas;
+use Stolt\GitUserBend\Exceptions\UnknownPersona;
 use Stolt\GitUserBend\Persona;
-use Stolt\GitUserBend\Persona\Collection;
 
 class Storage
 {
@@ -14,7 +14,7 @@ class Storage
     /**
      * @var string
      */
-    private $storageFile;
+    private string $storageFile;
 
     /**
      * @param string $storageFile
@@ -25,7 +25,7 @@ class Storage
     }
 
     /**
-     * @param  Stolt\GitUserBend\Persona $persona The persona to add.
+     * @param  Persona $persona The persona to add.
      * @return boolean
      */
     public function add(Persona $persona): bool
@@ -64,7 +64,7 @@ class Storage
     /**
      * Returns all personas sorted by their usage frequency.
      *
-     * @return Stolt\GitUserBend\Persona\Collection
+     * @return Collection
      */
     public function all(): Collection
     {
@@ -72,11 +72,12 @@ class Storage
             return new Collection();
         }
 
-        $personas = json_decode(file_get_contents($this->storageFile), true);
+        $personas = json_decode((string) file_get_contents($this->storageFile), true);
 
         $collection = new Collection();
+
         foreach ($personas as $personaEntry) {
-            $collection->add(Persona::fromStorageEntry($personaEntry));
+            $collection->add(Persona::fromStorageEntry((array) $personaEntry));
         }
 
         return $collection->sorted();

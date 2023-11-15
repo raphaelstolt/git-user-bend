@@ -28,7 +28,7 @@ class CollectionTest extends TestCase
  {"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":10}]
 CONTENT;
 
-        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($collection));
+        $this->assertJsonStringEqualsJsonString((string) $expectedJson, (string) json_encode($collection));
     }
 
     #[Test]
@@ -110,6 +110,7 @@ CONTENT;
 
         $expectedFrequencyByIndex = [52, 22, 5];
 
+        /** @var Persona $persona */
         foreach ($personas as $index => $persona) {
             $this->assertEquals(
                 $expectedFrequencyByIndex[$index],

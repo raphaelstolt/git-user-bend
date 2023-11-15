@@ -40,10 +40,10 @@ class TestCase extends PHPUnitTestCase
     /**
      * Create a temporary Git repository.
      *
-     * @param  Stolt\GitUserBend\Git\User $user If set a local Git user is configured.
+     * @param User|null $user If set a local Git user is configured.
      * @return void
      */
-    protected function createTemporaryGitRepository(User $user = null)
+    protected function createTemporaryGitRepository(User $user = null): void
     {
         $currentDirectory = getcwd();
         chdir($this->temporaryDirectory);
@@ -63,21 +63,21 @@ class TestCase extends PHPUnitTestCase
             }
         }
 
-        chdir($currentDirectory);
+        chdir((string) $currentDirectory);
     }
 
     /**
      * Remove directory and files in it.
      *
-     * @return void
+     * @param string $directory
      */
-    protected function removeDirectory($directory)
+    protected function removeDirectory(string $directory): void
     {
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
-
+        /** @var \SplFileInfo $fileinfo */
         foreach ($files as $fileinfo) {
             if ($fileinfo->isDir()) {
                 @rmdir($fileinfo->getRealPath());
@@ -96,13 +96,13 @@ class TestCase extends PHPUnitTestCase
      *
      * @return integer
      */
-    protected function createTemporaryStorageFile($content)
+    protected function createTemporaryStorageFile(string $content): int
     {
         $temporaryStorageFile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Storage::FILE_NAME;
 
-        return file_put_contents($temporaryStorageFile, $content);
+        return (int) file_put_contents($temporaryStorageFile, $content);
     }
 
     /**
@@ -111,7 +111,7 @@ class TestCase extends PHPUnitTestCase
      * @param  string $alias
      * @return integer
      */
-    protected function getUsageFrequency($alias)
+    protected function getUsageFrequency($alias): int
     {
         $temporaryStorageFile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
@@ -128,17 +128,17 @@ class TestCase extends PHPUnitTestCase
     /**
      * Create temporary gub dotfile.
      *
-     * @param  Stolt\GitUserBend\Persona $persona The persona to set in the gub dotfile.
+     * @param Persona $persona The persona to set in the gub dotfile.
      *
      * @return integer
      */
-    protected function createTemporaryGubDotfile(Persona $persona)
+    protected function createTemporaryGubDotfile(Persona $persona): int
     {
         $temporaryGubDotfile = $this->temporaryDirectory
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
-        return file_put_contents(
+        return (int) file_put_contents(
             $temporaryGubDotfile,
             json_encode($persona->gubFileSerialize())
         );

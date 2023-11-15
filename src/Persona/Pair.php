@@ -17,14 +17,14 @@ class Pair implements Countable, IteratorAggregate
     /**
      * @var array
      */
-    private $personas = [];
+    private array $personas = [];
 
     /**
      * @param  Persona $persona
      * @throws DuplicateAlias
      * @throws AlreadyAliasedPersona
      */
-    public function add(Persona $persona)
+    public function add(Persona $persona): void
     {
         foreach ($this->personas as $presentPersona) {
             if ($presentPersona->getAlias() === $persona->getAlias()) {
@@ -53,7 +53,7 @@ class Pair implements Countable, IteratorAggregate
 
     /**
      * @throws \RuntimeException
-     * @return Stolt\GitUserBend\Git\User
+     * @return User
      */
     public function factorUser(): User
     {

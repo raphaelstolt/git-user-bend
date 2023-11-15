@@ -14,20 +14,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 class WhoamiCommand extends Command
 {
     /**
-     * @var Stolt\GitUserBend\Git\Repository
+     * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Storage
+     * @var Storage
      */
-    private $storage;
+    private Storage $storage;
 
     /**
      * Initialize.
      *
-     * @param Stolt\GitUserBend\Persona\Storage $storage
-     * @param Stolt\GitUserBend\Git\Repository $repository
+     * @param Storage $storage
+     * @param Repository $repository
      * @return void
      */
     public function __construct(Storage $storage, Repository $repository)
@@ -43,7 +43,7 @@ class WhoamiCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('whoami');
         $this->setDescription('Shows the current persona of a Git repository');
@@ -62,7 +62,7 @@ class WhoamiCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $directory = $input->getArgument('directory');
+        $directory = (string) $input->getArgument('directory');
 
         try {
             $this->repository->setDirectory($directory);

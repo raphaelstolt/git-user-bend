@@ -6,6 +6,7 @@ use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Exceptions\UnresolvablePair;
 use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Pair;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Traits\Guards;
@@ -20,20 +21,20 @@ class UseCommand extends Command
     use Guards;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Repository
+     * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Storage
+     * @var Storage
      */
-    private $storage;
+    private Storage $storage;
 
     /**
      * Initialize.
      *
-     * @param Stolt\GitUserBend\Persona\Storage $storage
-     * @param Stolt\GitUserBend\Persona\Git\Repository $repository
+     * @param Storage $storage
+     * @param Repository $repository
      * @return void
      */
     public function __construct(Storage $storage, Repository $repository)
@@ -49,7 +50,7 @@ class UseCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('use');
         $this->setDescription('Uses a persona for a Git repository');
@@ -88,12 +89,12 @@ class UseCommand extends Command
     /**
      * Execute command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface   $input
+     * @param OutputInterface $output
      *
-     * @return void
+     * @return integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $directory = $input->getArgument('directory');
         $isFromDotfileUse = $input->getOption('from-dotfile');
@@ -101,21 +102,21 @@ class UseCommand extends Command
         $aliases = $input->getArgument('aliases');
 
         try {
-            $this->guardDualAliasArguments($input, $output);
-            $this->repository->setDirectory($directory);
+            $this->guardDualAliasArguments($input);
+            $this->repository->setDirectory((string) $directory);
 
             if ($isFromDotfileUse) {
                 return $this->useFromGubDotfile($input, $output);
             }
             if ($aliases) {
-                $pairPersonas = $this->guardAliases($aliases);
+                $pairPersonas = $this->guardAliases((string) $aliases);
                 $pair = new Pair();
                 foreach ($pairPersonas as $persona) {
                     $pair->add($persona);
                 }
                 $user = $pair->factorUser();
             } else {
-                $alias = $this->guardRequiredAlias($input->getArgument('alias'));
+                $alias = $this->guardRequiredAlias((string) $alias);
                 $alias = $this->guardAlias($alias);
                 $persona = $this->storage->all()->getByAlias($alias);
                 $user = $persona->factorUser();
@@ -143,6 +144,7 @@ class UseCommand extends Command
 
             if ($this->repository->setUser($user)) {
                 if ($aliases) {
+                    /** @var Persona $pairPersona */
                     foreach ($pair as $pairPersona) {
                         $this->storage->incrementUsageFrequency($pairPersona->getAlias());
                     }
@@ -169,16 +171,13 @@ class UseCommand extends Command
     }
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     * @throws \Stolt\GitUserBend\Exceptions\Exception
+     * @param  InputInterface   $input
+     * @throws Exception
      */
-    private function guardDualAliasArguments(
-        InputInterface $input,
-        OutputInterface $output
-    ) {
+    private function guardDualAliasArguments(InputInterface $input): void
+    {
         $alias = $input->getArgument('alias');
-        $aliases = explode(',', $input->getArgument('aliases'));
+        $aliases = explode(',', (string) $input->getArgument('aliases'));
 
         if ($alias && count($aliases) > 1) {
             $exceptionMessage = "The 'alias' and 'aliases' arguments can't be used together.";
@@ -187,14 +186,14 @@ class UseCommand extends Command
     }
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param  InputInterface   $input
+     * @param  OutputInterface $output
      * @return integer
      */
     private function useFromGubDotfile(
         InputInterface $input,
         OutputInterface $output
-    ) {
+    ): int {
         $directory = $input->getArgument('directory');
 
         try {

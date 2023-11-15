@@ -17,21 +17,20 @@ class ExportCommand extends Command
     use Guards;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Repository
+     * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Storage
+     * @var Storage
      */
-    private $storage;
+    private Storage $storage;
 
     /**
      * Initialize.
      *
-     * @param Stolt\GitUserBend\Persona\Storage $storage
-     * @param Stolt\GitUserBend\Persona\Git\Repository $repository
-     * @return void
+     * @param Storage $storage
+     * @param Repository $repository
      */
     public function __construct(Storage $storage, Repository $repository)
     {
@@ -46,7 +45,7 @@ class ExportCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $commandDescription = 'Exports a persona into a '
             . Repository::GUB_FILENAME . ' file';
@@ -73,19 +72,21 @@ class ExportCommand extends Command
     /**
      * Execute command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface   $input
+     * @param OutputInterface $output
      *
-     * @return void
+     * @return integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $alias = $this->guardAlias($input->getArgument('alias'));
+            $alias = $this->guardAlias((string) $input->getArgument('alias'));
             $directory = $input->getArgument('directory');
 
-            $this->repository->setDirectory($directory);
+            $this->repository->setDirectory((string) $directory);
+
             $persona = $this->storage->all()->getByAlias($alias);
+
             $gubDotfile = $directory
                 . DIRECTORY_SEPARATOR
                 . Repository::GUB_FILENAME;

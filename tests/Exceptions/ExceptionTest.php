@@ -2,16 +2,17 @@
 
 namespace Stolt\GitUserBend\Tests\Exceptions;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Stolt\GitUserBend\Exceptions\Exception;
 
 class ExceptionTest extends TestCase
 {
-    /**
-     * @test
-     * @group unit
-     */
-    public function returnInforizedMessage()
+
+    #[Test]
+    #[Group('unit')]
+    public function returnInforizedMessage(): void
     {
         $exceptionMessage = "The persona 'foo' is already "
             . "present in '/tmp/.gub'.";

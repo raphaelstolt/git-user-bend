@@ -7,9 +7,9 @@ class Exception extends \Exception
     /**
      * @return string
      */
-    public function getInforizedMessage()
+    public function getInforizedMessage(): string
     {
-        return preg_replace(
+        return (string) preg_replace(
             "~\'(.+)\'~U",
             '<info>$1</info>',
             $this->getMessage()

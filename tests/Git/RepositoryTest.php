@@ -43,11 +43,9 @@ class RepositoryTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function throwsExpectedExceptionWhenNotARepository()
+    #[Test]
+    #[Group('unit')]
+    public function throwsExpectedExceptionWhenNotARepository(): void
     {
         $this->expectException(NotAGitRepository::class);
         $expectedExceptionMessage = "No Git repository in '{$this->temporaryDirectory}'.";
@@ -158,8 +156,8 @@ class RepositoryTest extends TestCase
         $localRepositoryUser = new User('John Doe', 'john.doe@example.org', 'jd');
         $expectedPersona = new Persona(
             $localRepositoryUser->getAlias(),
-            $localRepositoryUser->getName(),
-            $localRepositoryUser->getEmail()
+            (string) $localRepositoryUser->getName(),
+            (string) $localRepositoryUser->getEmail()
         );
 
         $this->createTemporaryGitRepository($localRepositoryUser);

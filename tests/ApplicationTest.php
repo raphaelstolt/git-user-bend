@@ -2,15 +2,15 @@
 
 namespace Stolt\GitUserBend\Tests;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ApplicationTest extends TestCase
 {
-    /**
-     * @test
-     * @group integration
-     */
-    public function executableIsAvailable()
+    #[Test]
+    #[Group('integration')]
+    public function executableIsAvailable(): void
     {
         $binaryCommand = 'php bin/git-user-bend';
 

@@ -20,22 +20,22 @@ class Persona implements \JsonSerializable
     /**
      * @var string
      */
-    private $alias;
+    private string $alias;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $email;
+    private string $email;
 
     /**
      * @var integer
      */
-    private $usageFrequency;
+    private int $usageFrequency;
 
     /**
      * @param string  $alias
@@ -58,7 +58,7 @@ class Persona implements \JsonSerializable
      * @throws InvalidPersona
      * @return void
      */
-    private function guardValidity()
+    private function guardValidity(): void
     {
         try {
             $this->guardAlias($this->alias);
@@ -88,8 +88,8 @@ class Persona implements \JsonSerializable
     }
 
     /**
-     * @param  Stolt\GitUserBend\Git\Repository $repository
-     * @return Stolt\GitUserBend\Persona
+     * @param  Repository $repository
+     * @return Persona
      */
     public static function fromRepository(Repository $repository): Persona
     {
@@ -97,7 +97,7 @@ class Persona implements \JsonSerializable
     }
 
     /**
-     * @return Stolt\GitUserBend\Git\User
+     * @return User
      */
     public function factorUser(): User
     {

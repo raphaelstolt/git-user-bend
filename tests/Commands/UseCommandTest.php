@@ -305,7 +305,7 @@ CONTENT;
 
     #[Test]
     #[Group('integration')]
-    public function usesPersonaFromGubDotfile()
+    public function usesPersonaFromGubDotfile(): void
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 

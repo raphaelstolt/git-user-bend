@@ -18,14 +18,14 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
     /**
      * @var array
      */
-    private $personas = [];
+    private array $personas = [];
 
     /**
      * @param  Persona $persona
      * @throws DuplicateAlias
      * @throws AlreadyAliasedPersona
      */
-    public function add(Persona $persona)
+    public function add(Persona $persona): void
     {
         foreach ($this->personas as $presentPersona) {
             if ($presentPersona->getAlias() === $persona->getAlias()) {
@@ -121,7 +121,6 @@ class Collection implements Countable, IteratorAggregate, JsonSerializable
     }
 
     /**
-     * @param  string $name
      * @param  Persona $lookupPersona
      * @return boolean
      */

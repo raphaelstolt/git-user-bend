@@ -17,15 +17,14 @@ class RetireCommand extends Command
     use Guards;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Storage
+     * @var Storage
      */
-    private $storage;
+    private Storage $storage;
 
     /**
      * Initialize.
      *
-     * @param Stolt\GitUserBend\Persona\Storage $storage
-     * @return void
+     * @param Storage $storage
      */
     public function __construct(Storage $storage)
     {
@@ -39,7 +38,7 @@ class RetireCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('retire');
         $this->setDescription('Retires a defined persona');
@@ -55,15 +54,15 @@ class RetireCommand extends Command
     /**
      * Execute command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface   $input
+     * @param OutputInterface $output
      *
-     * @return void
+     * @return integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $alias = $this->guardAlias($input->getArgument('alias'));
+            $alias = $this->guardAlias((string) $input->getArgument('alias'));
             $persona = $this->storage->all()->getByAlias($alias);
 
             if ($this->storage->remove($alias)) {

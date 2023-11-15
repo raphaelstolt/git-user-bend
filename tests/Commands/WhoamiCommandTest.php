@@ -57,7 +57,6 @@ class WhoamiCommandTest extends TestCase
     }
 
     /**
-     * @param  Stolt\GitUserBend\Git\User $user
      * @return void
      */
     protected function setApplication(User $user = null): void

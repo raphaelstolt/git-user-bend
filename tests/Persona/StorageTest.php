@@ -56,8 +56,8 @@ class StorageTest extends TestCase
         $this->assertTrue($addedAPersona);
         $this->assertFileExists($this->storageFile);
         $this->assertJsonStringEqualsJsonString(
-            $expectedStorageFileContent,
-            file_get_contents($this->storageFile)
+            (string) $expectedStorageFileContent,
+            (string) file_get_contents($this->storageFile)
         );
     }
 
@@ -85,7 +85,7 @@ CONTENT;
         $this->assertTrue($addedAPersona);
         $this->assertJsonStringEqualsJsonString(
             $expectedStorageContent,
-            file_get_contents($this->storageFile)
+            (string) file_get_contents($this->storageFile)
         );
     }
 
@@ -158,6 +158,7 @@ CONTENT;
 
         $expectedFrequencyByIndex = [52, 22, 5];
 
+        /** @var Persona $persona */
         foreach ($personas as $index => $persona) {
             $this->assertEquals(
                 $expectedFrequencyByIndex[$index],
@@ -188,6 +189,7 @@ CONTENT;
 
         $expectedPersonaAliasByIndex = ['sd', 'jo'];
 
+        /** @var Persona $persona */
         foreach ($personas as $index => $persona) {
             $this->assertEquals(
                 $expectedPersonaAliasByIndex[$index],

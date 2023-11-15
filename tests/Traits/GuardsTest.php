@@ -2,6 +2,8 @@
 
 namespace Stolt\GitUserBend\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Stolt\GitUserBend\Exceptions\InvalidAlias;
 use Stolt\GitUserBend\Exceptions\InvalidEmail;
@@ -12,11 +14,9 @@ class GuardsTest extends TestCase
 {
     use Guards;
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function guardsAliasLength()
+    #[Test]
+    #[Group('unit')]
+    public function guardsAliasLength(): void
     {
         $maxAliasLength = Persona::MAX_ALIAS_LENGTH;
         $alias = str_repeat('a', $maxAliasLength + 1);
@@ -29,11 +29,9 @@ class GuardsTest extends TestCase
         $this->guardAlias($alias);
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function guardsAliasNotEmpty()
+    #[Test]
+    #[Group('unit')]
+    public function guardsAliasNotEmpty(): void
     {
         $this->expectException(InvalidAlias::class);
         $this->expectExceptionMessage('The provided alias is empty.');
@@ -41,13 +39,11 @@ class GuardsTest extends TestCase
         $this->guardAlias(' ');
     }
 
-    /**
-     * @test
-     * @group unit
-     */
-    public function guardsEmailAddress()
+    #[Test]
+    #[Group('unit')]
+    public function guardsEmailAddress(): void
     {
-        $email = 1234;
+        $email = '1234';
 
         $this->expectException(InvalidEmail::class);
         $expectedExceptionMessage = "The provided email address '{$email}' is invalid.";

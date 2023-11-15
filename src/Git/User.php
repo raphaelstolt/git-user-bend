@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Stolt\GitUserBend\Git;
 
+use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Persona;
 
 class User
@@ -12,12 +13,12 @@ class User
     /**
      * @var string
      */
-    private $name;
+    private string|null $name;
 
     /**
      * @var string
      */
-    private $email;
+    private string|null $email;
 
     /**
      * @var string
@@ -25,13 +26,13 @@ class User
     private $alias;
 
     /**
-     * @param string $name
-     * @param string $email
+     * @param string|null $name
+     * @param string|null $email
      * @param string $alias
      */
     public function __construct(
-        $name = null,
-        $email = null,
+        ?string $name = null,
+        ?string $email = null,
         string $alias = User::REPOSITORY_USER_ALIAS
     ) {
         $this->name = $name;
@@ -48,9 +49,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): string|null
     {
         return $this->name;
     }
@@ -65,9 +66,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): string|null
     {
         return $this->email;
     }
@@ -118,15 +119,15 @@ class User
     }
 
     /**
-     * @throws Stolt\GitUserBend\Exceptions\InvalidPersona
-     * @return Stolt\GitUserBend\Persona
+     * @throws InvalidPersona
+     * @return Persona
      */
     public function factorPersona(): Persona
     {
         return new Persona(
             $this->getAlias(),
-            $this->getName(),
-            $this->getEmail()
+            (string) $this->getName(),
+            (string) $this->getEmail()
         );
     }
 }

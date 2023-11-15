@@ -14,7 +14,7 @@ trait Guards
 {
     /**
      * @param  string $alias
-     * @throws Stolt\GitUserBend\Exceptions\InvalidAlias
+     * @throws InvalidAlias
      * @return string
      */
     public function guardAlias(string $alias)
@@ -36,12 +36,12 @@ trait Guards
 
     /**
      * @param  string $aliases
-     * @throws Stolt\GitUserBend\Exceptions\Exception
-     * @throws Stolt\GitUserBend\Exceptions\NoDefinedPersonas
-     * @throws Stolt\GitUserBend\Exceptions\UnknownPersona
+     * @throws Exception
+     * @throws NoDefinedPersonas
+     * @throws UnknownPersona
      * @return array
      */
-    private function guardAliases($aliases)
+    private function guardAliases(string $aliases): array
     {
         $aliases = explode(',', $aliases);
         if (count($aliases) === 1) {
@@ -59,11 +59,11 @@ trait Guards
     }
 
     /**
-     * @param  string $alias
-     * @throws Stolt\GitUserBend\Exceptions\Exception
+     * @param string|null $alias
+     * @throws Exception
      * @return string
      */
-    public function guardRequiredAlias($alias)
+    public function guardRequiredAlias(?string $alias): string
     {
         if ($alias == null) {
             throw new Exception('Required alias argument not provided.');
@@ -74,10 +74,10 @@ trait Guards
 
     /**
      * @param  string $email
-     * @throws Stolt\GitUserBend\Exceptions\InvalidEmail
+     * @throws InvalidEmail
      * @return void
      */
-    public function guardEmail(string $email)
+    public function guardEmail(string $email): void
     {
         $validEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
 

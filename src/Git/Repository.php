@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Stolt\GitUserBend\Git;
 
 use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
+use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
 use Stolt\GitUserBend\Exceptions\NotADirectory;
 use Stolt\GitUserBend\Exceptions\NotAGitRepository;
@@ -17,14 +18,9 @@ class Repository
     const GUB_FILENAME = '.gub';
 
     /**
-     * @var Stolt\GitUserBend\Git\User
-     */
-    private $user;
-
-    /**
      * @var string
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @param  string $directory
@@ -36,10 +32,10 @@ class Repository
 
     /**
      * @param  string $directory
-     * @throws Stolt\GitUserBend\Exceptions\NotADirectory
-     * @throws Stolt\GitUserBend\Exceptions\NotAGitRepository
+     * @throws NotADirectory
+     * @throws NotAGitRepository
      */
-    public function setDirectory(string $directory)
+    public function setDirectory(string $directory): void
     {
         if (!is_dir($directory)) {
             $message = "The directory '{$directory}' doesn't exist.";
@@ -81,7 +77,7 @@ class Repository
     /**
      * Creates a local .gub file.
      *
-     * @param  Stolt\GitUserBend\Persona $persona
+     * @param  Persona $persona
      * @return boolean
      */
     public function createGubDotfile(Persona $persona): bool
@@ -102,11 +98,12 @@ class Repository
     }
 
     /**
-     * @throws InvalidGubDotfile
      * @throws NonExistentGubDotfile
-     * @return Stolt\GitUserBend\Persona
+     * @throws InvalidPersona
+     * @throws InvalidGubDotfile
+     * @return Persona
      */
-    public function getPersonaFromGubDotfile()
+    public function getPersonaFromGubDotfile(): Persona
     {
         if (!$this->hasGubDotfile()) {
             $exceptionMessage = 'No ' . self::GUB_FILENAME . ' file present '
@@ -118,12 +115,12 @@ class Repository
             . DIRECTORY_SEPARATOR
             . self::GUB_FILENAME;
 
-        $personaFromGubDotfile = json_decode(
-            file_get_contents($gubDotfile),
+        $personaFromGubDotfile = (array) json_decode(
+            (string) file_get_contents($gubDotfile),
             true
         );
 
-        if ($personaFromGubDotfile === null) {
+        if ($personaFromGubDotfile == null) {
             $exceptionMessage = 'Invalid ' . self::GUB_FILENAME . ' file content. '
                 . 'JSON error: ' . json_last_error_msg() . '.';
             throw new InvalidGubDotfile($exceptionMessage);
@@ -134,7 +131,7 @@ class Repository
             && isset($personaFromGubDotfile['email'])
         ) {
             return new Persona(
-                $personaFromGubDotfile['alias'],
+                (string) $personaFromGubDotfile['alias'],
                 $personaFromGubDotfile['name'],
                 $personaFromGubDotfile['email']
             );
@@ -147,7 +144,7 @@ class Repository
 
     /**
      * @throws UnresolvablePersona
-     * @return Stolt\GitUserBend\Persona
+     * @return Persona
      */
     public function getPersonaFromConfiguration(): Persona
     {
@@ -176,7 +173,7 @@ class Repository
 
         if ($returnValue === 0 && count($output) > 1) {
             $possiblePair = $this->factorUser($output);
-            if (strstr($possiblePair->getName(), " and ")) {
+            if (str_contains((string) $possiblePair->getName(), " and ")) {
                 return true;
             }
         }
@@ -186,7 +183,7 @@ class Repository
 
     /**
      * @throws UnresolvablePair
-     * @return Stolt\GitUserBend\Git\User
+     * @return User
      */
     public function getPairUserFromConfiguration(): User
     {
@@ -226,7 +223,7 @@ class Repository
 
     /**
      * @param  array  $output
-     * @return Stolt\GitUserBend\Git\User
+     * @return User
      */
     private function factorUser(array $output): User
     {
@@ -236,9 +233,9 @@ class Repository
             $user[$key] = str_replace("'", '', $value);
         }
 
-        $name = isset($user['name']) ? $user['name'] : null;
-        $email = isset($user['email']) ? $user['email'] : null;
-        $alias = isset($user['alias']) ? $user['alias'] : User::REPOSITORY_USER_ALIAS;
+        $name = $user['name'] ?? null;
+        $email = $user['email'] ?? null;
+        $alias = $user['alias'] ?? User::REPOSITORY_USER_ALIAS;
 
         return new User($name, $email, $alias);
     }

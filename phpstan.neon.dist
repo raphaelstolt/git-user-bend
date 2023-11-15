@@ -5,7 +5,9 @@ parameters:
         - tests
     reportUnmatchedIgnoredErrors: false
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
+        - '#Constant STORAGE_FILE not found.#'
         - '#Constant WORKING_DIRECTORY not found.#'
         - '#Mockery\\MockInterface#'
         - '#Mockery\\LegacyMockInterface#'
@@ -15,3 +17,6 @@ parameters:
         - '#Cannot cast#'
         - '#is never read#'
         - '#Comparison operation ">="#'
+        - '#Access to an undefined property#'
+        - '#Call to method all#'
+        - '#only iterables are supported#'

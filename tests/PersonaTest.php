@@ -131,7 +131,7 @@ class PersonaTest extends TestCase
         ];
         $expectedJson = json_encode($expectedPersona);
 
-        $this->assertJsonStringEqualsJsonString($expectedJson, json_encode($persona));
+        $this->assertJsonStringEqualsJsonString((string) $expectedJson, (string) json_encode($persona));
     }
     #[Test]
     #[Group('unit')]

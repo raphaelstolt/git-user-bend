@@ -4,6 +4,7 @@ namespace Stolt\GitUserBend\Commands;
 use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Pair;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Traits\Guards;
@@ -18,21 +19,20 @@ class PairCommand extends Command
     use Guards;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Repository
+     * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
-     * @var Stolt\GitUserBend\Persona\Storage
+     * @var Storage
      */
-    private $storage;
+    private Storage $storage;
 
     /**
      * Initialize.
      *
-     * @param Stolt\GitUserBend\Persona\Storage $storage
-     * @param Stolt\GitUserBend\Persona\Git\Repository $repository
-     * @return void
+     * @param Storage $storage
+     * @param Repository $repository
      */
     public function __construct(Storage $storage, Repository $repository)
     {
@@ -47,7 +47,7 @@ class PairCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('pair');
         $this->setDescription('Enables pair programming by using several defined personas');
@@ -71,19 +71,19 @@ class PairCommand extends Command
     /**
      * Execute command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface   $input
+     * @param OutputInterface $output
      *
-     * @return void
+     * @return integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $aliases = $input->getArgument('aliases');
         $directory = $input->getArgument('directory');
 
         try {
-            $this->repository->setDirectory($directory);
-            $pairPersonas = $this->guardAliases($aliases);
+            $this->repository->setDirectory((string) $directory);
+            $pairPersonas = $this->guardAliases((string) $aliases);
 
             $pair = new Pair();
             foreach ($pairPersonas as $persona) {
@@ -92,6 +92,7 @@ class PairCommand extends Command
 
             if ($this->repository->setUser($pair->factorUser())) {
                 foreach ($pair as $persona) {
+                    /** @var Persona $persona */
                     $this->storage->incrementUsageFrequency($persona->getAlias());
                 }
 
