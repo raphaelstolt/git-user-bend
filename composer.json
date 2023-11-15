@@ -34,7 +34,9 @@
         "configure-commit-template": "Configures a local commit message template.",
         "cs-fix": "Fixes coding standard violations.",
         "cs-lint": "Checks for coding standard violations.",
-        "application-version-guard": "Checks that the application version matches the given Git tag."
+        "application-version-guard": "Checks that the application version matches the given Git tag.",
+        "validate-gitattributes": "Checks the leanness of this package.",
+        "static-analyse": "Runs a static code analysis via PHPStan."
     },
     "scripts": {
         "test": "phpunit",
@@ -43,12 +45,14 @@
         "cs-fix": "php-cs-fixer fix . --allow-risky=yes -vv || true",
         "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --dry-run --allow-risky=yes",
         "application-version-guard": "php bin/application-version --verify-tag-match",
-        "validate-gitattributes": "lean-package-validator validate"
+        "validate-gitattributes": "lean-package-validator validate",
+        "static-analyse": "phpstan analyse --configuration phpstan.neon.dist"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "mockery/mockery": "^1.0",
         "php-mock/php-mock-phpunit": "^2.7||^1.1",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.3||^9.6.13",
         "stolt/lean-package-validator": "^3.2",
         "vierbergenlars/php-semver": "^3.0"

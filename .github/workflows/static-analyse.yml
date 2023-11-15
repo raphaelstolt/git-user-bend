@@ -1,0 +1,29 @@
+name: static-analyse
+
+on: push
+
+jobs:
+  tests:
+    name: static-analyse
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - "8.1"
+
+    steps:
+      -   name: Checkout
+          uses: actions/checkout@v4
+
+      -   name: Install PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: "${{ matrix.php }}"
+
+      -   name: Install Composer dependencies
+          run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      -   name: Run static analyse
+          run: composer run-script static-analyse
