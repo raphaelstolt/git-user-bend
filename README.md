@@ -5,7 +5,7 @@ git-user-bend
 
 The `git-user-bend` CLI is an utility tool for managing the Git user configuration (i.e. name and email) of a given Git repository. With it you can create a set of __personas__ and easily __bend__ them when doing company work, open source development, or __pair__ programming sessions.
 
-With the in Git `2.13` introduced [conditional configuration includes](https://git-scm.com/docs/git-config#_conditional_includes) you can set a `.gitconfig` for a group of repositories which already might suit your needs.
+With the in Git `2.13` introduced [conditional configuration includes](https://git-scm.com/docs/git-config#_conditional_includes) you can set a `.gitconfig` for a group of repositories, which already might suit your needs.
 
 #### Known relatives
 This CLI is influenced by the [Gas](https://github.com/walle/gas) Ruby gem and might also contain elements of [pair](https://github.com/square/pair).
@@ -81,13 +81,13 @@ composer test
 ```
 
 #### License
-This library and its CLI are licensed under the MIT license. Please see [LICENSE](LICENSE.md) for more details.
+This library and its CLI are licensed under the MIT license. Please see [LICENSE.md](LICENSE.md) for more details.
 
 #### Changelog
-Please see [CHANGELOG](CHANGELOG.md) for more details.
+Please see [CHANGELOG.md](CHANGELOG.md) for more details.
 
 #### Code of Conduct
-Please see [CONDUCT](CONDUCT.md) for more details.
+Please see [CONDUCT.md](CONDUCT.md) for more details.
 
 #### Contributing
-Please see [CONTRIBUTING](CONTRIBUTING.md) for more details.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
