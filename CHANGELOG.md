@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [v1.2.1] - 2023-11-28
+
+### Added
+
+- Distribution via PHAR.
+
 ## [v1.2.0] - 2023-11-28
 
 ### Removed
@@ -45,7 +51,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## v1.0.0 - 2017-04-03
 - First release.
 
-[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.2.1...HEAD
+[v1.2.1]: https://github.com/raphaelstolt/git-user-bend/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.2...v1.2.0
 [v1.1.2]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/raphaelstolt/git-user-bend/compare/v1.1.0...v1.1.1
