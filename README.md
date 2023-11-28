@@ -25,6 +25,9 @@ Since the default name of the CLI is quite a mouthful, an alias which can be pla
 alias gub='~/.config/composer/vendor/bin/git-user-bend $@'
 ```
 
+> [!TIP]
+> As of release `v1.2.1` it's also possible to install and use `git-user-bend` via a PHAR [file](https://github.com/raphaelstolt/git-user-bend/releases/tag/v1.2.1).
+
 ## Usage
 Run the `git-user-bend whoami` CLI within a Git repository (or an argumented one) and it will allow you to view the currently used persona respectively the Git user configuration details.
 

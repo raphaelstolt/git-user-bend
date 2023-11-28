@@ -9,6 +9,7 @@
 .php-cs-fixer.php export-ignore
 bin/application-version export-ignore
 bin/release-version export-ignore
+box.json.dist export-ignore
 CHANGELOG.md export-ignore
 CONDUCT.md export-ignore
 CONTRIBUTING.md export-ignore
