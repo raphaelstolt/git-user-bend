@@ -1,6 +1,6 @@
 {
     "name": "stolt/git-user-bend",
-    "description": "An utility tool for managing the Git user configuration.",
+    "description": "A utility tool for managing the Git user configuration.",
     "keywords": ["git" , "user", "configuration", "cli", "dev"],
     "license": "MIT",
     "authors": [
