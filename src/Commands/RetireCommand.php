@@ -69,7 +69,7 @@ class RetireCommand extends Command
                 $outputContent = "<info>Retired persona <comment>{$persona}</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             throw new CommandFailed("Failed to retire persona {$persona}.");
@@ -77,7 +77,7 @@ class RetireCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

@@ -91,7 +91,7 @@ class AddCommand extends Command
                 $outputContent = "<info>Added persona <comment>{$persona}</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             throw new CommandFailed("Failed to add persona {$persona}.");
@@ -99,7 +99,7 @@ class AddCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

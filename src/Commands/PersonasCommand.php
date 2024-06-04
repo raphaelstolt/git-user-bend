@@ -74,7 +74,7 @@ class PersonasCommand extends Command
             if (file_exists(STORAGE_FILE)) {
                 system($editor . ' ' . STORAGE_FILE . ((new OsHelper())->isWindows() ? '' : ' > `tty`'));
 
-                return 0;
+                return self::SUCCESS;
             }
 
             $error = '<error>Error:</error> No personas defined yet '
@@ -83,7 +83,7 @@ class PersonasCommand extends Command
                 . 'command to define some.';
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
 
         $personas = $this->storage->all();
@@ -93,7 +93,7 @@ class PersonasCommand extends Command
                 . 'command to define some.';
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
 
         $this->renderTable($output, $personas);

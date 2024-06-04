@@ -106,7 +106,7 @@ class ExportCommand extends Command
                     . "<comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             throw new CommandFailed("Failed to export persona {$persona}.");
@@ -114,7 +114,7 @@ class ExportCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

@@ -158,7 +158,7 @@ class UseCommand extends Command
 
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             throw new CommandFailed("Failed to set persona '{$persona}'.");
@@ -166,7 +166,7 @@ class UseCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 
@@ -215,7 +215,8 @@ class UseCommand extends Command
                 $outputContent = "<info>Set <comment>{$personaFromGubDotfile}</comment>"
                     . " from <comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
-                return 0;
+
+                return self::SUCCESS;
             }
 
             $exceptionMessage = "Failed to set persona '{$personaFromGubDotfile}' "
@@ -225,7 +226,7 @@ class UseCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

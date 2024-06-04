@@ -99,7 +99,7 @@ class WhoamiCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

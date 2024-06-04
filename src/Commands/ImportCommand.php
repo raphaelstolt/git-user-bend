@@ -105,7 +105,7 @@ class ImportCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 
@@ -124,7 +124,7 @@ class ImportCommand extends Command
                     . "from <comment>{$gubDotfile}</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             $exceptionMessage = "Failed to import persona '{$persona}' "
@@ -134,7 +134,7 @@ class ImportCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 
@@ -158,7 +158,7 @@ class ImportCommand extends Command
                     . "<comment>{$directory}</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             $exceptionMessage = "Failed to import persona '{$persona}' "
@@ -168,7 +168,7 @@ class ImportCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }

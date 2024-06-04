@@ -100,7 +100,7 @@ class PairCommand extends Command
                     . "'{$pair}'</comment>.</info>";
                 $output->writeln($outputContent);
 
-                return 0;
+                return self::SUCCESS;
             }
 
             throw new CommandFailed("Failed to set pair '{$pair}'.");
@@ -108,7 +108,7 @@ class PairCommand extends Command
             $error = "<error>Error:</error> " . $e->getInforizedMessage();
             $output->writeln($error);
 
-            return 1;
+            return self::FAILURE;
         }
     }
 }
