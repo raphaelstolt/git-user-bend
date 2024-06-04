@@ -3,15 +3,12 @@ namespace Stolt\GitUserBend\Commands;
 
 use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\Exception;
-use Stolt\GitUserBend\Exceptions\InvalidAlias;
-use Stolt\GitUserBend\Exceptions\InvalidEmail;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Traits\Guards;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AddCommand extends Command
