@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Added
+
+- Attested dist builds.
+
 ## [v1.2.1] - 2023-11-28
 
 ### Added
