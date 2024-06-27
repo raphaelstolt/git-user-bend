@@ -6,9 +6,12 @@ on:
       - 'v*'
 
 jobs:
-    tests:
+    build:
         name: distribute
         runs-on: ubuntu-latest
+
+        permissions:
+          contents: write
 
         strategy:
             fail-fast: true
@@ -39,7 +42,7 @@ jobs:
                 run: bin/git-user-bend.phar --version
 
             -   name: Create Release
-                uses: softprops/action-gh-release@v1
+                uses: softprops/action-gh-release@v2
                 if: startsWith(github.ref, 'refs/tags/')
                 with:
                     files: bin/git-user-bend.phar
