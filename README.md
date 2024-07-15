@@ -92,6 +92,12 @@ used for the Git `user.email` configuration.
 git-user-bend pair "<alias1,aliasN>" [<directory>]
 ```
 
+To end a pair programming session and restore the default `user.name` and `user.email` the `unpair` command is available.
+
+``` bash
+git-user-bend unpair <directory>
+```
+
 To check the persona, pair or respectively the Git user configuration of a repository the `whoami` command is a 
 pleasant shortcut.
 ``` bash

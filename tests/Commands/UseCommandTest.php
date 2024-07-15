@@ -3,12 +3,15 @@
 namespace Stolt\GitUserBend\Tests\Commands;
 
 use \Mockery;
+use \phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\UseCommand;
 use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Collection;
 use Stolt\GitUserBend\Persona\Pair;
@@ -19,6 +22,8 @@ use Symfony\Component\Console\Application;
 
 class UseCommandTest extends TestCase
 {
+    use PHPMock;
+
     /**
      * @var \Symfony\Component\Console\Application
      */
@@ -309,7 +314,7 @@ CONTENT;
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
-        $this->createTemporaryGitRepository();
+        $this->createTemporaryGitRepository(new User('John Doe', 'john.doe@example.org'));
         $this->createTemporaryGubDotfile($persona);
 
         $command = $this->application->find('use');
@@ -339,7 +344,7 @@ CONTENT;
     {
         $persona = new Persona('jd', 'John Doe', 'john.doe@example.org');
 
-        $this->createTemporaryGitRepository();
+        $this->createTemporaryGitRepository(new User('John Doe', 'john.doe@example.org'));
         $this->createTemporaryGubDotfile($persona);
 
         $existingStorageContent = <<<CONTENT
@@ -501,17 +506,31 @@ CONTENT;
 
     #[Test]
     #[Group('integration')]
+    #[RunInSeparateProcess]
     public function usesPersonaAndIncrementsUsageFrequency(): void
     {
-        $persona = new Persona('jo', 'John Doe', 'john.doe@example.org');
+        $persona = new Persona('jo', 'John Doe', 'john.doe@users.noreply.github.com');
 
         $this->createTemporaryGitRepository();
 
         $existingStorageContent = <<<CONTENT
-[{"alias":"jo","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
- {"alias":"so","name":"Some One","email":"some.one@example.org","usage_frequency":23}]
+[{"alias":"jo","name":"John Doe","email":"john.doe@users.noreply.github.com","usage_frequency":11},
+ {"alias":"so","name":"Some One","email":"some.one@users.noreply.github.com","usage_frequency":23}]
 CONTENT;
         $this->createTemporaryStorageFile($existingStorageContent);
+
+        $mockedOutput = [
+            'user.name Raphael Stolt',
+            'user.email raphael.stolt@users.noreply.github.com',
+        ];
+
+        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
+        $exec->expects($this->any())->willReturnCallback(
+            function ($command, &$output, &$returnValue) use ($mockedOutput) {
+                $output = $mockedOutput;
+                $returnValue = 0;
+            }
+        );
 
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
@@ -634,6 +653,7 @@ CONTENT;
 
     #[Test]
     #[Group('integration')]
+    #[RunInSeparateProcess]
     public function usesPairAndIncrementsUsageFrequencies(): void
     {
         $john = new Persona('jo', 'John Doe', 'john.doe@example.org');
@@ -652,6 +672,19 @@ CONTENT;
  {"alias":"ja","name":"Jane Doe","email":"jane.one@example.org","usage_frequency":23}]
 CONTENT;
         $this->createTemporaryStorageFile($existingStorageContent);
+
+        $mockedOutput = [
+            'user.name Raphael Stolt',
+            'user.email raphael.stolt@users.noreply.github.com',
+        ];
+
+        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
+        $exec->expects($this->any())->willReturnCallback(
+            function ($command, &$output, &$returnValue) use ($mockedOutput) {
+                $output = $mockedOutput;
+                $returnValue = 0;
+            }
+        );
 
         $command = $this->application->find('use');
         $commandTester = new CommandTester($command);

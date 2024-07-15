@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\PairCommand;
 use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Collection;
 use Stolt\GitUserBend\Persona\Storage;
@@ -231,7 +232,7 @@ CONTENT;
     #[Group('integration')]
     public function setsPairPersonasAndIncrementsUsageFrequencies(): void
     {
-        $this->createTemporaryGitRepository();
+        $this->createTemporaryGitRepository(new User('John Doe', 'john.doe@example.org'));
 
         $existingStorageContent = <<<CONTENT
 [{"alias":"jd","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},

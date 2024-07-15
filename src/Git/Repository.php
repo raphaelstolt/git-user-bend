@@ -10,7 +10,6 @@ use Stolt\GitUserBend\Exceptions\NotADirectory;
 use Stolt\GitUserBend\Exceptions\NotAGitRepository;
 use Stolt\GitUserBend\Exceptions\UnresolvablePair;
 use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
-use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Persona;
 
 class Repository
@@ -163,6 +162,25 @@ class Repository
     }
 
     /**
+     * @throws UnresolvablePersona
+     * @throws InvalidPersona
+     */
+    public function getFormerPersonaFromConfiguration(): Persona
+    {
+        chdir($this->directory);
+
+        $command = 'git config --get-regexp "^user.former.*"';
+        exec($command, $output, $returnValue);
+
+        if ($returnValue === 0) {
+            $localFormerGitUser = $this->factorFormerUser($output);
+            return $localFormerGitUser->factorPersona();
+        }
+
+        throw new UnresolvablePersona('Unable to resolve former persona from Git configuration.');
+    }
+
+    /**
      * @return boolean
      */
     public function hasPair(): bool
@@ -199,12 +217,39 @@ class Repository
     }
 
     /**
-     * @param  User $user The use to configure locally.
+     * @throws UnresolvablePersona
+     */
+    public function storePreviousUser(): bool
+    {
+        chdir($this->directory);
+
+        $persona = $this->getPersonaFromConfiguration();
+
+        $storageCommands = [
+            "git config --local user.former.email {$persona->getEmail()}",
+            "git config --local user.former.name '{$persona->getName()}'",
+        ];
+
+        foreach ($storageCommands as $command) {
+            exec($command, $output, $returnValue);
+            if ($returnValue !== 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param User $user The use to configure locally.
+     * @throws UnresolvablePersona
      * @return boolean
      */
     public function setUser(User $user): bool
     {
         chdir($this->directory);
+
+        $this->storePreviousUser();
 
         $commands = [
             "git config --local user.email \"{$user->getEmail()}\"",
@@ -230,6 +275,25 @@ class Repository
         foreach ($output as $keyValueLine) {
             list($key, $value) = explode(' ', $keyValueLine, 2);
             $key = str_replace('user.', '', $key);
+            $user[$key] = str_replace("'", '', $value);
+        }
+
+        $name = $user['name'] ?? null;
+        $email = $user['email'] ?? null;
+        $alias = $user['alias'] ?? User::REPOSITORY_USER_ALIAS;
+
+        return new User($name, $email, $alias);
+    }
+
+    /**
+     * @param  array  $output
+     * @return User
+     */
+    private function factorFormerUser(array $output): User
+    {
+        foreach ($output as $keyValueLine) {
+            list($key, $value) = explode(' ', $keyValueLine, 2);
+            $key = str_replace('user.former.', '', $key);
             $user[$key] = str_replace("'", '', $value);
         }
 

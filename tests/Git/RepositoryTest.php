@@ -75,9 +75,9 @@ class RepositoryTest extends TestCase
     #[Group('unit')]
     public function setsLocalRepositoryUser(): void
     {
-        $localRepositoryUser = new User('John Doe', 'john.doe@example.org');
+        $localRepositoryUser = new User('John Doe', 'johndoe@users.noreply.github.com');
 
-        $this->createTemporaryGitRepository();
+        $this->createTemporaryGitRepository($localRepositoryUser);
 
         $repository = new Repository($this->temporaryDirectory);
         $setAUser = $repository->setUser($localRepositoryUser);
@@ -368,5 +368,46 @@ class RepositoryTest extends TestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         (new Repository($this->temporaryDirectory))->setDirectory($this->temporaryDirectory);
+    }
+
+    #[Test]
+    #[Group('unit')]
+    public function returnsFormerPersonaAsExpected(): void
+    {
+        $this->createTemporaryGitRepository();
+
+        chdir($this->temporaryDirectory);
+
+        $commands = [
+            'git config --local user.former.email "test@test.org"',
+            'git config --local user.former.name "John Test"',
+        ];
+
+        foreach ($commands as $command) {
+            exec($command, $output, $returnValue);
+        }
+
+        $expectedPersona = new Persona(User::REPOSITORY_USER_ALIAS, 'John Test', 'test@test.org');
+
+        $actualPersona = (new Repository($this->temporaryDirectory))->getFormerPersonaFromConfiguration();
+
+        $this->assertEquals($expectedPersona, $actualPersona);
+
+    }
+
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function throwsExpectedExceptionWhenFormerPersonaNotResolvableFromGitConfiguration(): void
+    {
+        $this->expectException(UnresolvablePersona::class);
+        $this->expectExceptionMessage('Unable to resolve former persona from Git configuration.');
+
+        $this->createTemporaryGitRepository();
+
+        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
+        $exec->expects($this->any())->willReturn(1);
+
+        (new Repository($this->temporaryDirectory))->getFormerPersonaFromConfiguration();
     }
 }
