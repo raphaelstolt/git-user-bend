@@ -89,6 +89,8 @@ class PairCommand extends Command
                 $pair->add($persona);
             }
 
+            $this->repository->storePreviousUser();
+
             if ($this->repository->setUser($pair->factorUser())) {
                 foreach ($pair as $persona) {
                     /** @var Persona $persona */

@@ -2,9 +2,9 @@
 
 namespace Stolt\GitUserBend\Commands;
 
-use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\Exception;
 use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Git\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,6 +64,10 @@ class UnpairCommand extends Command
             $this->repository->setDirectory((string) $directory);
 
             $formerPersona = $this->repository->getFormerPersonaFromConfiguration();
+
+            $this->repository->removeFormerPersonaFromConfiguration();
+
+            $this->repository->setUser(new User($formerPersona->getName(), $formerPersona->getEmail()));
 
             $outputContent = "<info>Reset user config to <comment>"
                 . "'{$formerPersona->getName()} <{$formerPersona->getEmail()}>'</comment>.</info>";

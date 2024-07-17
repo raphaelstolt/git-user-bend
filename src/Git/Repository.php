@@ -180,6 +180,26 @@ class Repository
         throw new UnresolvablePersona('Unable to resolve former persona from Git configuration.');
     }
 
+    public function removeFormerPersonaFromConfiguration(): bool
+    {
+        chdir($this->directory);
+
+        $commands = [
+            'git config --unset user.former.email',
+            'git config --unset user.former.name',
+        ];
+
+        foreach ($commands as $command) {
+            exec($command, $output, $returnValue);
+
+            if ($returnValue !== 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @return boolean
      */
@@ -226,8 +246,8 @@ class Repository
         $persona = $this->getPersonaFromConfiguration();
 
         $storageCommands = [
-            "git config --local user.former.email {$persona->getEmail()}",
-            "git config --local user.former.name '{$persona->getName()}'",
+            "git config --local --replace-all user.former.email {$persona->getEmail()}",
+            "git config --local --replace-all user.former.name '{$persona->getName()}'",
         ];
 
         foreach ($storageCommands as $command) {
@@ -248,8 +268,6 @@ class Repository
     public function setUser(User $user): bool
     {
         chdir($this->directory);
-
-        $this->storePreviousUser();
 
         $commands = [
             "git config --local user.email \"{$user->getEmail()}\"",

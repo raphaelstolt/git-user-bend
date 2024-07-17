@@ -6,9 +6,12 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Stolt\GitUserBend\Commands\PairCommand;
 use Stolt\GitUserBend\Commands\UnpairCommand;
+use Stolt\GitUserBend\Exceptions\InvalidPersona;
+use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
 use Stolt\GitUserBend\Git\User;
 use Stolt\GitUserBend\Helpers\Str as OsHelper;
+use Stolt\GitUserBend\Persona;
 use Stolt\GitUserBend\Persona\Storage;
 use Stolt\GitUserBend\Tests\CommandTester;
 use Stolt\GitUserBend\Tests\TestCase;
@@ -119,6 +122,10 @@ CONTENT;
         $this->assertTrue($commandTester->getStatusCode() == Command::FAILURE);
     }
 
+    /**
+     * @throws UnresolvablePersona
+     * @throws InvalidPersona
+     */
     #[Test]
     #[Group('integration')]
     public function resetsGitConfigToFormerUser(): void
@@ -161,5 +168,13 @@ CONTENT;
 
         $this->assertSame($expectedDisplay, $commandTester->getDisplay());
         $commandTester->assertCommandIsSuccessful();
+
+        $repository = new Repository($this->temporaryDirectory);
+        $personaFromConfig = $repository->getPersonaFromConfiguration();
+        $this->assertSame('John Doe', $personaFromConfig->getName());
+        $this->assertSame('test@test.org', $personaFromConfig->getEmail());
+
+        $this->expectException(UnresolvablePersona::class);
+        $repository->getFormerPersonaFromConfiguration();
     }
 }

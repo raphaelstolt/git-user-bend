@@ -18,12 +18,12 @@ use Symfony\Component\Console\Application;
 class PairCommandTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
     private $application;
 
     /**
-     * @return \Symfony\Component\Console\Application
+     * @return Application
      */
     protected function getApplication(): Application
     {
@@ -211,6 +211,7 @@ CONTENT;
 
         $repository->shouldReceive('setDirectory')->times(1);
         $repository->shouldReceive('setUser')->times(1)->andReturn(false);
+        $repository->shouldReceive('storePreviousUser')->times(1)->andReturn(true);
 
         $command = $application->find('pair');
         $commandTester = new CommandTester($command);
