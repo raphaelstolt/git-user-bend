@@ -40,7 +40,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "test-with-coverage": "phpunit --coverage-html coverage-reports",
+        "test-with-coverage": "export XDEBUG_MODE=coverage && phpunit --coverage-html coverage-reports",
         "configure-commit-template": "git config --add commit.template .gitmessage",
         "cs-fix": "php-cs-fixer fix . --allow-risky=yes -vv || true",
         "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --dry-run --allow-risky=yes",
