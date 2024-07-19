@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
 
-- Added the `--branch|-b` option to the  `unpair` command. Closes [#14](https://github.com/raphaelstolt/git-user-bend/issues/14).
+- Added the `--branch|-b` option to the  `pair` command. Closes [#14](https://github.com/raphaelstolt/git-user-bend/issues/14).
 
 ## [v1.3.1] - 2024-07-18
 
