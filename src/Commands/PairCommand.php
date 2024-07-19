@@ -108,7 +108,7 @@ class PairCommand extends Command
                 $output->writeln($outputContent);
 
                 if ($branch !== false) {
-                    $this->repository->createBranch(trim($branch));
+                    $this->repository->createBranch(trim((string) $branch));
                     $outputContent = "Switched to a new branch <comment>{$branch}</comment>.";
                     $output->writeln($outputContent);
                 }

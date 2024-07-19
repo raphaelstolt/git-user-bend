@@ -4,9 +4,9 @@ parameters:
         - src
         - tests
     reportUnmatchedIgnoredErrors: false
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
         - '#Constant STORAGE_FILE not found.#'
         - '#Constant WORKING_DIRECTORY not found.#'
         - '#Mockery\\MockInterface#'
