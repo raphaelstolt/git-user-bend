@@ -103,7 +103,7 @@ class WhoamiCommandTest extends TestCase
         ]);
 
         $expectedDisplay = <<<CONTENT
-The current unaliased persona is John Doe <john.doe@example.org>.
+The current unaliased persona is John Doe <john.doe@example.org> on branch main.
 
 CONTENT;
 
@@ -132,7 +132,7 @@ CONTENT;
         ]);
 
         $expectedDisplay = <<<CONTENT
-The current persona is jo ~ John Doe <john.doe@example.org>.
+The current persona is jo ~ John Doe <john.doe@example.org> on branch main.
 
 CONTENT;
 

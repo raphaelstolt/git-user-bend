@@ -437,4 +437,34 @@ class RepositoryTest extends TestCase
 
         (new Repository($this->temporaryDirectory))->createBranch('pair-branch');
     }
+
+    #[Test]
+    #[Group('unit')]
+    public function returnsBranchAsExpected(): void
+    {
+        $this->createTemporaryGitRepository();
+
+        $expectedBranch = 'pair-branch';
+
+        $creationResult = (new Repository($this->temporaryDirectory))->createBranch($expectedBranch);
+        $this->assertTrue($creationResult);
+
+        $this->assertSame($expectedBranch, (new Repository($this->temporaryDirectory))->getCurrentBranch());
+    }
+
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function throwsExpectedExceptionWhenWhenGetCurrentBranchFails(): void
+    {
+        $this->expectException(CommandFailed::class);
+        $this->expectExceptionMessage('Unable to retrieve current branch.');
+
+        $this->createTemporaryGitRepository();
+
+        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
+        $exec->expects($this->once())->willReturn(1);
+
+        (new Repository($this->temporaryDirectory))->getCurrentBranch();
+    }
 }

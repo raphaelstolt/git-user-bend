@@ -45,7 +45,7 @@ class WhoamiCommand extends Command
     protected function configure(): void
     {
         $this->setName('whoami');
-        $this->setDescription('Shows the current persona of a Git repository');
+        $this->setDescription('Shows the current persona and branch of a Git repository');
 
         $directoryArgumentDescription = 'The directory of the Git repository';
         $this->addArgument(
@@ -79,16 +79,18 @@ class WhoamiCommand extends Command
             $persona = Persona::fromRepository($this->repository);
             $personas = $this->storage->all();
 
+            $branch = $this->repository->getCurrentBranch();
+
             if ($personas->count() === 0 || $personas->hasAliasedPersona($persona) === false) {
-                $outputContent = "<info>The current unaliased persona is "
-                    . "<comment>{$persona}</comment>.</info>";
+                $outputContent = "The current unaliased persona is "
+                    . "<comment>{$persona}</comment> on branch <comment>{$branch}</comment>.";
             } else {
                 $persona = $personas->getByNameAndEmail(
                     $persona->getName(),
                     $persona->getEmail()
                 );
-                $outputContent = "<info>The current persona is <comment>{$persona}"
-                    . "</comment>.</info>";
+                $outputContent = "The current persona is <comment>{$persona}"
+                    . "</comment> on branch <comment>{$branch}</comment>.";
             }
 
             $output->writeln($outputContent);

@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Added
+
+- The `whoami` command displays the current Git branch. 
+
 ## [v1.4.0] - 2024-07-19
 
 ### Added

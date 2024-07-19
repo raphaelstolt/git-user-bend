@@ -71,6 +71,23 @@ class Repository
     }
 
     /**
+     * @throws CommandFailed
+     * @return string
+     */
+    public function getCurrentBranch(): string
+    {
+        chdir($this->directory);
+
+        $command = 'git branch --show-current';
+        exec($command, $output, $returnValue);
+
+        if ($returnValue === 0) {
+            return $output[0];
+        }
+        throw new CommandFailed('Unable to retrieve current branch.');
+    }
+
+    /**
      * @return boolean
      */
     public function hasGubDotfile(): bool
