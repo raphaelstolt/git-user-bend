@@ -260,4 +260,35 @@ CONTENT;
         $this->assertEquals(12, $this->getUsageFrequency('jd'));
         $this->assertEquals(24, $this->getUsageFrequency('so'));
     }
+
+    #[Test]
+    #[Group('integration')]
+    public function createsPairingBranchAsExpected(): void
+    {
+        $this->createTemporaryGitRepository(new User('John Doe', 'john.doe@example.org'));
+
+        $existingStorageContent = <<<CONTENT
+[{"alias":"jd","name":"John Doe","email":"john.doe@example.org","usage_frequency":11},
+ {"alias":"so","name":"Some One","email":"some.one@example.org","usage_frequency":23}]
+CONTENT;
+        $this->createTemporaryStorageFile($existingStorageContent);
+
+        $command = $this->application->find('pair');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'directory' => $this->temporaryDirectory,
+            'aliases' => 'jd, so',
+            '--branch' => 'pairing-branch',
+        ]);
+
+        $expectedDisplay = <<<CONTENT
+Set pair 'John Doe and Some One <john.doe@example.org>'.
+Switched to a new branch pairing-branch.
+
+CONTENT;
+
+        $this->assertSame($expectedDisplay, $commandTester->getDisplay());
+        $commandTester->assertCommandIsSuccessful();
+    }
 }

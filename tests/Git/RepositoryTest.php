@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Ticket;
+use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
 use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
 use Stolt\GitUserBend\Exceptions\NotADirectory;
@@ -409,5 +410,31 @@ class RepositoryTest extends TestCase
         $exec->expects($this->any())->willReturn(1);
 
         (new Repository($this->temporaryDirectory))->getFormerPersonaFromConfiguration();
+    }
+
+    #[Test]
+    #[Group('unit')]
+    public function createsBranchAsExpected(): void
+    {
+        $this->createTemporaryGitRepository();
+
+        $creationResult = (new Repository($this->temporaryDirectory))->createBranch('pair-branch');
+        $this->assertTrue($creationResult);
+    }
+
+    #[Test]
+    #[Group('unit')]
+    #[RunInSeparateProcess]
+    public function throwsExpectedExceptionWhenWhenCreateBranchFails(): void
+    {
+        $this->expectException(CommandFailed::class);
+        $this->expectExceptionMessage('Unable to create branch pair-branch.');
+
+        $this->createTemporaryGitRepository();
+
+        $exec = $this->getFunctionMock('Stolt\GitUserBend\Git', 'exec');
+        $exec->expects($this->once())->willReturn(1);
+
+        (new Repository($this->temporaryDirectory))->createBranch('pair-branch');
     }
 }

@@ -11,6 +11,7 @@ use Stolt\GitUserBend\Traits\Guards;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PairCommand extends Command
@@ -65,6 +66,9 @@ class PairCommand extends Command
             $directoryArgumentDescription,
             WORKING_DIRECTORY
         );
+
+        $branchOptionDescription = 'The Git branch to create and pair in';
+        $this->addOption('branch', 'b', InputOption::VALUE_NONE, $branchOptionDescription);
     }
 
     /**
@@ -79,6 +83,8 @@ class PairCommand extends Command
     {
         $aliases = $input->getArgument('aliases');
         $directory = $input->getArgument('directory');
+
+        $branch = $input->getOption('branch');
 
         try {
             $this->repository->setDirectory((string) $directory);
@@ -100,6 +106,12 @@ class PairCommand extends Command
                 $outputContent = "<info>Set pair <comment>"
                     . "'{$pair}'</comment>.</info>";
                 $output->writeln($outputContent);
+
+                if ($branch !== false) {
+                    $this->repository->createBranch(trim($branch));
+                    $outputContent = "Switched to a new branch <comment>{$branch}</comment>.";
+                    $output->writeln($outputContent);
+                }
 
                 return self::SUCCESS;
             }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Stolt\GitUserBend\Git;
 
+use Stolt\GitUserBend\Exceptions\CommandFailed;
 use Stolt\GitUserBend\Exceptions\InvalidGubDotfile;
 use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Exceptions\NonExistentGubDotfile;
@@ -52,6 +53,24 @@ class Repository
     }
 
     /**
+     * @param string $name
+     * @throws CommandFailed
+     * @return bool
+     */
+    public function createBranch(string $name): bool
+    {
+        chdir($this->directory);
+
+        $command = 'git checkout -b ' . $name . ' 2>&1';
+        exec($command, $output, $returnValue);
+
+        if ($returnValue === 0) {
+            return true;
+        }
+        throw new CommandFailed('Unable to create branch ' . $name . '.');
+    }
+
+    /**
      * @return boolean
      */
     public function hasGubDotfile(): bool
@@ -97,6 +116,26 @@ class Repository
     }
 
     /**
+     * @throws UnresolvablePersona|InvalidPersona
+     * @return Persona
+     */
+    public function getPersonaFromConfiguration(): Persona
+    {
+        chdir($this->directory);
+        $command = 'git config --get-regexp "^user.*"';
+        exec($command, $output, $returnValue);
+
+        if ($returnValue === 0) {
+            $localGitUser = $this->factorUser($output);
+            if ($localGitUser->partial() === false) {
+                return $localGitUser->factorPersona();
+            }
+        }
+
+        throw new UnresolvablePersona('Unable to resolve persona from Git configuration.');
+    }
+
+    /**
      * @throws NonExistentGubDotfile
      * @throws InvalidPersona
      * @throws InvalidGubDotfile
@@ -139,26 +178,6 @@ class Repository
         $exceptionMessage = 'Invalid ' . self::GUB_FILENAME . ' file content '
             . 'unable to create a persona from it.';
         throw new InvalidGubDotfile($exceptionMessage);
-    }
-
-    /**
-     * @throws UnresolvablePersona
-     * @return Persona
-     */
-    public function getPersonaFromConfiguration(): Persona
-    {
-        chdir($this->directory);
-        $command = 'git config --get-regexp "^user.*"';
-        exec($command, $output, $returnValue);
-
-        if ($returnValue === 0) {
-            $localGitUser = $this->factorUser($output);
-            if ($localGitUser->partial() === false) {
-                return $localGitUser->factorPersona();
-            }
-        }
-
-        throw new UnresolvablePersona('Unable to resolve persona from Git configuration.');
     }
 
     /**
@@ -262,7 +281,6 @@ class Repository
 
     /**
      * @param User $user The use to configure locally.
-     * @throws UnresolvablePersona
      * @return boolean
      */
     public function setUser(User $user): bool

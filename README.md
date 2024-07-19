@@ -87,9 +87,9 @@ git-user-bend use [<alias>|<alias1,aliasN>] [<directory>] [--from-dotfile]
 
 To start a pair programming session, which will be identifiable in the Git commits, the `pair` command merges the user 
 details of several personas into one pair. The email of the first persona alias in the comma-separated list will be 
-used for the Git `user.email` configuration.
+used for the Git `user.email` configuration. If the `--branch|-b` is provided, a new Git branch will be created to pair in.
 ``` bash
-git-user-bend pair "<alias1,aliasN>" [<directory>]
+git-user-bend pair "<alias1,aliasN>" [<directory>] [--branch|-b]
 ```
 
 To end a pair programming session and restore the default `user.name` and `user.email` the `unpair` command is available.
