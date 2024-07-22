@@ -4,8 +4,8 @@ namespace Stolt\GitUserBend\Tests\Commands;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Stolt\GitUserBend\Commands\PairCommand;
-use Stolt\GitUserBend\Commands\UnpairCommand;
+use Stolt\GitUserBend\Commands\ResetCommand;
+use Stolt\GitUserBend\Commands\UseCommand;
 use Stolt\GitUserBend\Exceptions\InvalidPersona;
 use Stolt\GitUserBend\Exceptions\UnresolvablePersona;
 use Stolt\GitUserBend\Git\Repository;
@@ -17,7 +17,7 @@ use Stolt\GitUserBend\Tests\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-class UnpairCommandTest extends TestCase
+class ResetCommandTest extends TestCase
 {
     /**
      * @var Application
@@ -30,16 +30,16 @@ class UnpairCommandTest extends TestCase
     protected function getApplication(): Application
     {
         $application = new Application();
-        $command = new UnpairCommand(
+        $command = new UseCommand(
+            new Storage(STORAGE_FILE),
             new Repository($this->temporaryDirectory)
         );
-        $pairCommand = new PairCommand(
-            new Storage(STORAGE_FILE),
+        $resetCommand = new ResetCommand(
             new Repository($this->temporaryDirectory)
         );
 
         $application->add($command);
-        $application->add($pairCommand);
+        $application->add($resetCommand);
 
         return $application;
     }
@@ -85,7 +85,7 @@ class UnpairCommandTest extends TestCase
     #[Group('integration')]
     public function returnsExpectedWarningWhenProvidedDirectoryDoesNotExist(): void
     {
-        $command = $this->application->find('unpair');
+        $command = $this->application->find('reset');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -105,7 +105,7 @@ CONTENT;
     #[Group('integration')]
     public function returnsExpectedWarningWhenProvidedDirectoryIsNotAGitRepository(): void
     {
-        $command = $this->application->find('unpair');
+        $command = $this->application->find('reset');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -129,9 +129,9 @@ CONTENT;
     #[Group('integration')]
     public function resetsGitConfigToFormerUser(): void
     {
-        if ((new OsHelper())->isWindows()) {
+        /*if ((new OsHelper())->isWindows()) {
             $this->markTestSkipped('Skipping test on Windows systems');
-        }
+        }*/
 
         $this->createTemporaryGitRepository(new User('John Doe', 'test@test.org'));
 
@@ -143,17 +143,17 @@ CONTENT;
 CONTENT;
         $this->createTemporaryStorageFile($existingStorageContent);
 
-        $command = $this->application->find('pair');
+        $command = $this->application->find('use');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
             'directory' => $this->temporaryDirectory,
-            'aliases' => 'jd, so',
+            'alias' => 'jd',
         ]);
 
         $commandTester->assertCommandIsSuccessful();
 
-        $command = $this->application->find('unpair');
+        $command = $this->application->find('reset');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
