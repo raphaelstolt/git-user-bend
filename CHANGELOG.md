@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [v1.5.1] - 2024-07-23
+
+### Added
+
+- The `reset` command is added to the CLI application.
+
 ## [v1.5.0] - 2024-07-22
 
 ### Added
@@ -82,7 +88,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## v1.0.0 - 2017-04-03
 - First release.
 
-[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/raphaelstolt/git-user-bend/compare/v1.5.1...HEAD
+[v1.5.1]: https://github.com/raphaelstolt/git-user-bend/compare/v1.5.0...v1.5.1
 [v1.5.0]: https://github.com/raphaelstolt/git-user-bend/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/raphaelstolt/git-user-bend/compare/v1.3.1...v1.4.0
 [v1.3.1]: https://github.com/raphaelstolt/git-user-bend/compare/v1.3.0...v1.3.1
