@@ -395,6 +395,7 @@ CONTENT;
             . DIRECTORY_SEPARATOR
             . Repository::GUB_FILENAME;
 
+        $repository->shouldReceive('storePreviousUser')->times(1);
         $repository->shouldReceive('setDirectory')->times(1);
         $repository->shouldReceive('getGubDotfilePath')->times(1)
           ->andReturn($localGubDotfile);
@@ -570,6 +571,7 @@ CONTENT;
 
         $storage->shouldReceive('all')->times(1)->andReturn($personas);
         $repository->shouldReceive('setDirectory')->times(1);
+        $repository->shouldReceive('storePreviousUser')->times(1);
         $repository->shouldReceive('getPersonaFromConfiguration')
           ->times(1)->andThrow(new UnresolvablePersona());
         $repository->shouldReceive('setUser')->times(1)->andReturn(false);

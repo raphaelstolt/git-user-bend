@@ -106,6 +106,7 @@ class UseCommand extends Command
             $this->repository->setDirectory((string) $directory);
 
             if ($isFromDotfileUse) {
+                $this->repository->storePreviousUser();
                 return $this->useFromGubDotfile($input, $output);
             }
             if ($aliases) {
@@ -141,6 +142,8 @@ class UseCommand extends Command
             } catch (UnresolvablePair $e) {
                 // ignore because we are using users from persona storage
             }
+
+            $this->repository->storePreviousUser();
 
             if ($this->repository->setUser($user)) {
                 if ($aliases) {

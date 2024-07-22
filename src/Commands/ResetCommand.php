@@ -1,0 +1,85 @@
+<?php
+
+namespace Stolt\GitUserBend\Commands;
+
+use Stolt\GitUserBend\Exceptions\Exception;
+use Stolt\GitUserBend\Git\Repository;
+use Stolt\GitUserBend\Git\User;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class ResetCommand extends Command
+{
+    /**
+     * @var Repository
+     */
+    private Repository $repository;
+
+    /**
+     * Initialize.
+     *
+     * @param Repository $repository
+     */
+    public function __construct(Repository $repository)
+    {
+        $this->repository = $repository;
+
+        parent::__construct();
+    }
+
+    /**
+     * Command configuration.
+     *
+     * @return void
+     */
+    protected function configure(): void
+    {
+        $this->setName('reset');
+        $this->setDescription('Resets the current user');
+
+        $directoryArgumentDescription = 'The directory of the Git repository';
+        $this->addArgument(
+            'directory',
+            InputArgument::OPTIONAL,
+            $directoryArgumentDescription,
+            WORKING_DIRECTORY
+        );
+    }
+
+    /**
+     * Execute command.
+     *
+     * @param InputInterface   $input
+     * @param OutputInterface $output
+     *
+     * @return integer
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $directory = $input->getArgument('directory');
+
+        try {
+            $this->repository->setDirectory((string) $directory);
+
+            $formerPersona = $this->repository->getFormerPersonaFromConfiguration();
+
+            $this->repository->removeFormerPersonaFromConfiguration();
+
+            $this->repository->setUser(new User($formerPersona->getName(), $formerPersona->getEmail()));
+
+            $outputContent = "<info>Reset user config to <comment>"
+                . "'{$formerPersona->getName()} <{$formerPersona->getEmail()}>'</comment>.</info>";
+            $output->writeln($outputContent);
+
+            return self::SUCCESS;
+
+        } catch (Exception $e) {
+            $error = "<error>Error:</error> " . $e->getInforizedMessage();
+            $output->writeln($error);
+
+            return self::FAILURE;
+        }
+    }
+}

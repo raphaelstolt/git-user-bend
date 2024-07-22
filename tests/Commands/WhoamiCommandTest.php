@@ -17,9 +17,9 @@ use Symfony\Component\Console\Application;
 class WhoamiCommandTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
-    private $application;
+    private Application $application;
 
     /**
      * Set up test environment.
@@ -76,7 +76,7 @@ class WhoamiCommandTest extends TestCase
     }
 
     /**
-     * @return \Symfony\Component\Console\Application
+     * @return Application
      */
     protected function getApplication(): Application
     {

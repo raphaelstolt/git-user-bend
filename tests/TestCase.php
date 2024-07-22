@@ -47,7 +47,7 @@ class TestCase extends PHPUnitTestCase
     {
         $currentDirectory = getcwd();
         chdir($this->temporaryDirectory);
-        exec('git init');
+        exec('git init -b main 2>&1');
 
         if ($user) {
             if ($user->hasName()) {

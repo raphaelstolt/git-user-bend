@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
 
-- The `whoami` command displays the current Git branch. 
+- The `whoami` command displays the current Git branch.
+- New `reset` command.
 
 ## [v1.4.0] - 2024-07-19
 

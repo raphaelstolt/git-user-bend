@@ -85,6 +85,11 @@ have to be provided as a comma-separated list.
 git-user-bend use [<alias>|<alias1,aliasN>] [<directory>] [--from-dotfile]
 ```
 
+To reset the Git repository user to the values before, the `reset` command is available.
+``` bash
+git-user-bend reset [<directory>]
+```
+
 To start a pair programming session, which will be identifiable in the Git commits, the `pair` command merges the user 
 details of several personas into one pair. The email of the first persona alias in the comma-separated list will be 
 used for the Git `user.email` configuration. If the `--branch|-b` is provided, a new Git branch will be created to pair in.
