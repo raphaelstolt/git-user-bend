@@ -23,4 +23,36 @@ class ApplicationTest extends TestCase
         );
         $this->assertEquals(0, $returnValue);
     }
+
+    #[Test]
+    #[Group('integration')]
+    public function commandsAreAddedToTheApplication(): void
+    {
+        $binaryCommand = 'php bin/git-user-bend list';
+
+        exec($binaryCommand, $output, $returnValue);
+
+        $expectedCommands = [
+            'add',
+            'export',
+            'import',
+            'pair',
+            'unpair',
+            'personas',
+            'retire',
+            'use',
+            'reset',
+            'whoami'
+        ];
+
+        foreach ($expectedCommands as $expectedCommand) {
+            $this->assertStringContainsString(
+                $expectedCommand,
+                implode(PHP_EOL, $output),
+                sprintf('Expected command %s not present.', $expectedCommand)
+            );
+        }
+
+        $this->assertEquals(0, $returnValue);
+    }
 }
