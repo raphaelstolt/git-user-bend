@@ -36,7 +36,13 @@
         "cs-lint": "Checks for coding standard violations.",
         "application-version-guard": "Checks that the application version matches the given Git tag.",
         "validate-gitattributes": "Checks the leanness of this package.",
-        "static-analyse": "Runs a static code analysis via PHPStan."
+        "static-analyse": "Runs a static code analysis via PHPStan.",
+        "pre-commit-check": [
+            "test",
+            "cs-lint",
+            "static-analyse",
+            "application-version-guard"
+        ]
     },
     "scripts": {
         "test": "phpunit",
